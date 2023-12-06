@@ -9,11 +9,11 @@ export function makeMenu(p) {
 
   const methods = {
     loadAssets() {
-      data.startScreen = p.loadImage("./title.png");
-      data.startTextImg = p.loadImage("./start.png");
+      data.startScreen = p.loadImage("assets/title.png");
+      data.startTextImg = p.loadImage("assets/start.png");
     },
 
-    drawMenu() {
+    draw() {
       p.clear();
       p.noSmooth();
       p.noTint();
