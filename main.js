@@ -19,7 +19,7 @@ new p5((p) => {
     const canvasEl = p.createCanvas(512, 384);
     canvasEl.canvas.style = "";
     player.prepareAnims();
-    player.setAnim("idle-side");
+    player.setAnim("run-side");
   };
 
   p.draw = () => {
