@@ -32,6 +32,7 @@ new p5((p) => {
         p.background(51);
         p.fill("yellow");
         p.textSize(32);
+        player.update();
         player.draw();
         break;
       default:
@@ -73,6 +74,26 @@ new p5((p) => {
         case p.RIGHT_ARROW:
           player.setDirection("right");
           player.setAnim("run-side");
+          break;
+        default:
+      }
+    }
+  };
+
+  p.keyReleased = () => {
+    if (currentScene === "world") {
+      switch (p.keyCode) {
+        case p.UP_ARROW:
+          player.setAnim("idle-up");
+          break;
+        case p.DOWN_ARROW:
+          player.setAnim("idle-down");
+          break;
+        case p.LEFT_ARROW:
+          player.setAnim("idle-side");
+          break;
+        case p.RIGHT_ARROW:
+          player.setAnim("idle-side");
           break;
         default:
       }

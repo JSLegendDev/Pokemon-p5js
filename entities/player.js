@@ -9,7 +9,7 @@ export function makePlayer(p, x, y) {
     tileWidth: 32,
     tileHeight: 48,
     direction: "down",
-    speed: 20,
+    speed: 200,
     x,
     y,
   };
@@ -58,10 +58,28 @@ export function makePlayer(p, x, y) {
     getPos() {
       return { x: data.x, y: data.y };
     },
-    update() {},
-    draw() {
+    update() {
       data.previousTime = data.animationTimer;
       data.animationTimer += p.deltaTime;
+
+      const finalSpeed = (data.speed / 1000) * p.deltaTime;
+      if (p.keyIsDown(p.RIGHT_ARROW)) {
+        data.x += finalSpeed;
+      }
+
+      if (p.keyIsDown(p.LEFT_ARROW)) {
+        data.x -= finalSpeed;
+      }
+
+      if (p.keyIsDown(p.UP_ARROW)) {
+        data.y -= finalSpeed;
+      }
+
+      if (p.keyIsDown(p.DOWN_ARROW)) {
+        data.y += finalSpeed;
+      }
+    },
+    draw() {
       const animData = data.anims[data.currentAnim];
       let frameData;
       if (typeof animData === "number") {
