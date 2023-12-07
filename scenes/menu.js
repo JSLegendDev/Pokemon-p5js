@@ -16,7 +16,6 @@ export function makeMenu(p) {
     draw() {
       p.clear();
       p.noSmooth();
-      p.noTint();
       p.image(data.startScreen, 0, 0);
       if (data.alpha <= 0) data.blinkBack = true;
       if (data.alpha >= 255) data.blinkBack = false;
@@ -28,6 +27,7 @@ export function makeMenu(p) {
       }
       p.tint(255, data.alpha);
       p.image(data.startTextImg, 0, 320);
+      p.noTint();
     },
   };
 

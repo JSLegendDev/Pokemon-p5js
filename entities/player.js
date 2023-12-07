@@ -1,4 +1,4 @@
-export function makePlayer(p) {
+export function makePlayer(p, x, y) {
   const data = {
     playerSprite: null,
     frames: [],
@@ -6,6 +6,12 @@ export function makePlayer(p) {
     currentAnim: null,
     currentFrame: 0,
     animationTimer: 0,
+    tileWidth: 32,
+    tileHeight: 48,
+    direction: "down",
+    speed: 20,
+    x,
+    y,
   };
 
   const methods = {
@@ -15,18 +21,16 @@ export function makePlayer(p) {
     prepareAnims() {
       const nbColumns = 4;
       const nbRows = 4;
-      const tileWidth = 32;
-      const tileHeight = 48;
 
       let currentTileX = 0;
       let currentTileY = 0;
       for (let i = 0; i < nbRows; i++) {
         for (let j = 0; j < nbColumns; j++) {
           data.frames.push({ x: currentTileX, y: currentTileY });
-          currentTileX += tileWidth;
+          currentTileX += data.tileWidth;
         }
         currentTileX = 0;
-        currentTileY += tileHeight;
+        currentTileY += data.tileHeight;
       }
 
       data.anims = {
@@ -35,7 +39,7 @@ export function makePlayer(p) {
         "idle-up": 12,
         "run-down": { from: 0, to: 3, loop: true, speed: 8 },
         "run-side": { from: 4, to: 7, loop: true, speed: 8 },
-        "run-up": { from: 12, to: 15 },
+        "run-up": { from: 12, to: 15, loop: true, speed: 8 },
       };
     },
     setAnim(name) {
@@ -43,6 +47,16 @@ export function makePlayer(p) {
       data.currentFrame = 0;
       data.animationTimer = 0;
       data.previousTime = 0;
+    },
+    setDirection(direction) {
+      data.direction = direction;
+    },
+    setPos(x, y) {
+      data.x = x;
+      data.y = y;
+    },
+    getPos() {
+      return { x: data.x, y: data.y };
     },
     update() {},
     draw() {
@@ -70,11 +84,17 @@ export function makePlayer(p) {
         }
       }
 
+      p.push();
+      console.log(data.direction);
+      if (data.direction === "right") {
+        p.scale(-1, 1);
+        p.translate(-2 * data.x - data.tileWidth, 0);
+      }
       p.noSmooth();
       p.image(
         data.playerSprite,
-        200,
-        200,
+        data.x,
+        data.y,
         32,
         48,
         frameData.x,
@@ -82,6 +102,7 @@ export function makePlayer(p) {
         32,
         48
       );
+      p.pop();
     },
   };
 

@@ -7,7 +7,7 @@ new p5((p) => {
   const scenes = ["menu", "world", "battle"];
   let currentScene = "world";
   const menu = makeMenu(p);
-  const player = makePlayer(p);
+  const player = makePlayer(p, 200, 100);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
@@ -51,6 +51,28 @@ new p5((p) => {
           break;
         case "battle":
           // TODO
+          break;
+        default:
+      }
+    }
+
+    if (currentScene === "world") {
+      switch (p.keyCode) {
+        case p.UP_ARROW:
+          player.setDirection("up");
+          player.setAnim("run-up");
+          break;
+        case p.DOWN_ARROW:
+          player.setDirection("down");
+          player.setAnim("run-down");
+          break;
+        case p.LEFT_ARROW:
+          player.setDirection("left");
+          player.setAnim("run-side");
+          break;
+        case p.RIGHT_ARROW:
+          player.setDirection("right");
+          player.setAnim("run-side");
           break;
         default:
       }
