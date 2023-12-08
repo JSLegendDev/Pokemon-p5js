@@ -5,7 +5,7 @@ import { drawFpsCounter } from "./utils/debugUtils.js";
 new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
-  let currentScene = "world";
+  let currentScene = "menu";
   const menu = makeMenu(p);
   const player = makePlayer(p, 200, 100);
 
@@ -19,7 +19,7 @@ new p5((p) => {
     const canvasEl = p.createCanvas(512, 384);
     canvasEl.canvas.style = "";
     player.prepareAnims();
-    player.setAnim("idle-side");
+    player.setAnim("idle-down");
   };
 
   p.draw = () => {
@@ -56,43 +56,32 @@ new p5((p) => {
         default:
       }
     }
-
-    if (currentScene === "world") {
-      switch (p.keyCode) {
-        case p.UP_ARROW:
-          player.setDirection("up");
-          player.setAnim("run-up");
-          break;
-        case p.DOWN_ARROW:
-          player.setDirection("down");
-          player.setAnim("run-down");
-          break;
-        case p.LEFT_ARROW:
-          player.setDirection("left");
-          player.setAnim("run-side");
-          break;
-        case p.RIGHT_ARROW:
-          player.setDirection("right");
-          player.setAnim("run-side");
-          break;
-        default:
-      }
-    }
   };
 
   p.keyReleased = () => {
     if (currentScene === "world") {
-      switch (p.keyCode) {
-        case p.UP_ARROW:
+      for (const key of [
+        p.RIGHT_ARROW,
+        p.LEFT_ARROW,
+        p.UP_ARROW,
+        p.DOWN_ARROW,
+      ]) {
+        if (p.keyIsDown(key)) {
+          return;
+        }
+      }
+
+      switch (player.getDirection()) {
+        case "up":
           player.setAnim("idle-up");
           break;
-        case p.DOWN_ARROW:
+        case "down":
           player.setAnim("idle-down");
           break;
-        case p.LEFT_ARROW:
+        case "left":
           player.setAnim("idle-side");
           break;
-        case p.RIGHT_ARROW:
+        case "right":
           player.setAnim("idle-side");
           break;
         default:

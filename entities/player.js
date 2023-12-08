@@ -1,3 +1,5 @@
+import { getFramesPos } from "../utils/spritesheetUtils.js";
+
 export function makePlayer(p, x, y) {
   const data = {
     playerSprite: null,
@@ -19,19 +21,7 @@ export function makePlayer(p, x, y) {
       data.playerSprite = p.loadImage("assets/boy_run.png");
     },
     prepareAnims() {
-      const nbColumns = 4;
-      const nbRows = 4;
-
-      let currentTileX = 0;
-      let currentTileY = 0;
-      for (let i = 0; i < nbRows; i++) {
-        for (let j = 0; j < nbColumns; j++) {
-          data.frames.push({ x: currentTileX, y: currentTileY });
-          currentTileX += data.tileWidth;
-        }
-        currentTileX = 0;
-        currentTileY += data.tileHeight;
-      }
+      data.frames = getFramesPos(4, 4, data.tileWidth, data.tileHeight);
 
       data.anims = {
         "idle-down": 0,
@@ -48,6 +38,9 @@ export function makePlayer(p, x, y) {
       data.animationTimer = 0;
       data.previousTime = 0;
     },
+    getDirection() {
+      return data.direction;
+    },
     setDirection(direction) {
       data.direction = direction;
     },
@@ -58,26 +51,53 @@ export function makePlayer(p, x, y) {
     getPos() {
       return { x: data.x, y: data.y };
     },
+    movePlayer(moveBy) {
+      let isOnlyOneKeyDown = false;
+      for (const key of [
+        p.RIGHT_ARROW,
+        p.LEFT_ARROW,
+        p.UP_ARROW,
+        p.DOWN_ARROW,
+      ]) {
+        if (isOnlyOneKeyDown && p.keyIsDown(key)) {
+          return;
+        }
+
+        if (!isOnlyOneKeyDown && p.keyIsDown(key)) {
+          isOnlyOneKeyDown = true;
+        }
+      }
+
+      if (p.keyIsDown(p.RIGHT_ARROW)) {
+        if (data.direction !== "right") methods.setDirection("right");
+        if (data.currentAnim !== "run-side") methods.setAnim("run-side");
+        data.x += moveBy;
+      }
+
+      if (p.keyIsDown(p.LEFT_ARROW)) {
+        if (data.direction !== "left") methods.setDirection("left");
+        if (data.currentAnim !== "run-side") methods.setAnim("run-side");
+        data.x -= moveBy;
+      }
+
+      if (p.keyIsDown(p.UP_ARROW)) {
+        if (data.direction !== "up") methods.setDirection("up");
+        if (data.currentAnim !== "run-up") methods.setAnim("run-up");
+        data.y -= moveBy;
+      }
+
+      if (p.keyIsDown(p.DOWN_ARROW)) {
+        if (data.direction !== "down") methods.setDirection("down");
+        if (data.currentAnim !== "run-down") methods.setAnim("run-down");
+        data.y += moveBy;
+      }
+    },
     update() {
       data.previousTime = data.animationTimer;
       data.animationTimer += p.deltaTime;
 
-      const finalSpeed = (data.speed / 1000) * p.deltaTime;
-      if (p.keyIsDown(p.RIGHT_ARROW)) {
-        data.x += finalSpeed;
-      }
-
-      if (p.keyIsDown(p.LEFT_ARROW)) {
-        data.x -= finalSpeed;
-      }
-
-      if (p.keyIsDown(p.UP_ARROW)) {
-        data.y -= finalSpeed;
-      }
-
-      if (p.keyIsDown(p.DOWN_ARROW)) {
-        data.y += finalSpeed;
-      }
+      const moveBy = (data.speed / 1000) * p.deltaTime;
+      methods.movePlayer(moveBy);
     },
     draw() {
       const animData = data.anims[data.currentAnim];
@@ -103,13 +123,11 @@ export function makePlayer(p, x, y) {
       }
 
       p.push();
-      console.log(data.direction);
       if (data.direction === "right") {
         p.scale(-1, 1);
         p.translate(-2 * data.x - data.tileWidth, 0);
       }
       p.noSmooth();
-      console.log({ x: frameData.x, y: frameData.y });
       p.image(
         data.playerSprite,
         data.x,
@@ -127,5 +145,5 @@ export function makePlayer(p, x, y) {
     },
   };
 
-  return { ...data, ...methods };
+  return { ...methods };
 }
