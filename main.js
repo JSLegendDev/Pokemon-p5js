@@ -1,6 +1,6 @@
 import { makePlayer } from "./entities/player.js";
 import { makeMenu } from "./scenes/menu.js";
-import { drawFpsCounter } from "./utils/debug.js";
+import { drawFpsCounter } from "./utils/debugUtils.js";
 
 new p5((p) => {
   let font;
@@ -19,7 +19,7 @@ new p5((p) => {
     const canvasEl = p.createCanvas(512, 384);
     canvasEl.canvas.style = "";
     player.prepareAnims();
-    player.setAnim("run-side");
+    player.setAnim("idle-side");
   };
 
   p.draw = () => {

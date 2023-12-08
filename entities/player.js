@@ -35,7 +35,7 @@ export function makePlayer(p, x, y) {
 
       data.anims = {
         "idle-down": 0,
-        "idle-side": 4,
+        "idle-side": 6,
         "idle-up": 12,
         "run-down": { from: 0, to: 3, loop: true, speed: 8 },
         "run-side": { from: 4, to: 7, loop: true, speed: 8 },
@@ -109,16 +109,19 @@ export function makePlayer(p, x, y) {
         p.translate(-2 * data.x - data.tileWidth, 0);
       }
       p.noSmooth();
+      console.log({ x: frameData.x, y: frameData.y });
       p.image(
         data.playerSprite,
         data.x,
         data.y,
-        32,
-        48,
+        data.tileWidth,
+        data.tileHeight,
         frameData.x,
         frameData.y,
-        32,
-        48
+        // need to offset this by one because
+        // the first pixel is accounted for by the origin
+        data.tileWidth - 1,
+        data.tileHeight - 1
       );
       p.pop();
     },
