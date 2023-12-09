@@ -1,13 +1,13 @@
-import { makePlayer } from "./entities/player.js";
-import { makeMenu } from "./scenes/menu.js";
+import { Player } from "./entities/Player.js";
+import { Menu } from "./scenes/Menu.js";
 import { drawFpsCounter } from "./utils/debugUtils.js";
 
 new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
-  let currentScene = "world";
-  const menu = makeMenu(p);
-  const player = makePlayer(p, 200, 100);
+  let currentScene = "menu";
+  const menu = new Menu(p);
+  const player = new Player(p, 200, 100);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
@@ -72,7 +72,7 @@ new p5((p) => {
         }
       }
 
-      switch (player.getDirection()) {
+      switch (player.direction) {
         case "up":
           player.setAnim("idle-up");
           break;
