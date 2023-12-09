@@ -5,7 +5,7 @@ import { drawFpsCounter } from "./utils/debugUtils.js";
 new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
-  let currentScene = "menu";
+  let currentScene = "world";
   const menu = makeMenu(p);
   const player = makePlayer(p, 200, 100);
 
@@ -31,7 +31,8 @@ new p5((p) => {
         p.clear();
         p.background(51);
         p.fill("yellow");
-        p.textSize(32);
+        p.textSize(18);
+        p.text("Hello World!", 100, 200);
         player.update();
         player.draw();
         break;
