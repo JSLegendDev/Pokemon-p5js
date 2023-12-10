@@ -1,12 +1,17 @@
 import { Player } from "./entities/Player.js";
 import { Menu } from "./scenes/Menu.js";
 import { TiledMap } from "./maps/Map.js";
-import { drawFpsCounter } from "./utils/debugUtils.js";
+import { DebugMode } from "./utils/DebugMode.js";
+import { Camera } from "./utils/Camera.js";
 
 new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
   let currentScene = "menu";
+
+  const debugMode = new DebugMode(p);
+  const camera = new Camera(0, 0);
+
   const menu = new Menu(p);
   const player = new Player(p, 200, 100);
   const map = new TiledMap(p, 100, -150);
@@ -42,10 +47,14 @@ new p5((p) => {
       default:
     }
 
-    drawFpsCounter(p, font);
+    debugMode.drawFpsCounter(font);
   };
 
   p.keyPressed = () => {
+    if (p.keyCode === 112) {
+      debugMode.toggle();
+    }
+
     if (p.keyCode === p.ENTER) {
       switch (currentScene) {
         case "menu":
