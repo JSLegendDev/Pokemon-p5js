@@ -1,5 +1,6 @@
 import { Player } from "./entities/Player.js";
 import { Menu } from "./scenes/Menu.js";
+import { TiledMap } from "./maps/Map.js";
 import { drawFpsCounter } from "./utils/debugUtils.js";
 
 new p5((p) => {
@@ -8,9 +9,11 @@ new p5((p) => {
   let currentScene = "menu";
   const menu = new Menu(p);
   const player = new Player(p, 200, 100);
+  const map = new TiledMap(p, 100, -150);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
+    map.load("./assets/Trainer Tower interior.png", "./maps/world.json");
     menu.loadAssets();
     player.loadAssets();
   };
@@ -18,6 +21,7 @@ new p5((p) => {
   p.setup = () => {
     const canvasEl = p.createCanvas(512, 384);
     canvasEl.canvas.style = "";
+    map.prepareTiles();
     player.prepareAnims();
     player.setAnim("idle-down");
   };
@@ -29,10 +33,9 @@ new p5((p) => {
         break;
       case "world":
         p.clear();
-        p.background(51);
+        p.background(21);
         p.fill("yellow");
-        p.textSize(18);
-        p.text("Hello World!", 100, 200);
+        map.draw();
         player.update();
         player.draw();
         break;

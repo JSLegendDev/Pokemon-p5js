@@ -1,70 +1,55 @@
+import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
+
 export class TiledMap {
-  constructor(p, tiledMapUrl, tilesetUrl, posX, posY) {
+  constructor(p, x, y) {
     this.p = p;
-    this.tiledMapUrl = tiledMapUrl;
-    this.tilesetUrl = tilesetUrl;
-    this.posX = posX;
-    this.posY = posY;
+    this.tileWidth = 32;
+    this.tileHeight = 32;
+    this.x = x;
+    this.y = y;
   }
 
-  loadTiledMap() {
-    fetch(this.tiledMapUrl).then((response) => {
-      this.mapData = response.json();
-      this.nbCols = this.mapData.width;
-      this.nbRows = this.mapData.height;
-
-      this.framesPos = getFramesPos(
-        this.nbCols,
-        this.nbRows,
-        this.mapData.tilewidth,
-        this.mapData.tilewidth
-      );
-    });
+  async load(tilesetURL, tiledMapURL) {
+    this.mapImage = this.p.loadImage(tilesetURL);
+    const response = await fetch(tiledMapURL);
+    this.tiledData = await response.json();
   }
 
-  loadImgSrc() {
-    this.tileset = this.p.loadImage(this.tilesetUrl);
+  prepareTiles() {
+    this.tilesPos = getFramesPos(8, 55, this.tileWidth, this.tileHeight);
   }
 
-  drawMap() {
-    for (const layer of mapData.layers) {
+  draw() {
+    for (const layer of this.tiledData.layers) {
       if (layer.type === "tilelayer") {
-        drawTileLayer(layer);
-      }
-    }
-  }
+        const currentTilePos = {
+          x: this.x,
+          y: this.y,
+        };
+        let nbOfTilesDrawn = 0;
+        for (const tileNumber of layer.data) {
+          if (nbOfTilesDrawn % layer.width === 0) {
+            currentTilePos.x = 0;
+            currentTilePos.y += this.tileHeight;
+          } else {
+            currentTilePos.x += this.tileWidth;
+          }
+          nbOfTilesDrawn++;
 
-  drawTileLayer(layer) {
-    let currentTilePos = {
-      x,
-      y,
-    };
+          if (tileNumber === 0) continue;
 
-    let tileNumberIndex = 0;
-
-    for (let i = 0; i < this.nbRows; i++) {
-      for (let j = 0; j < this.nbCols; j++) {
-        const tileNumber = layer.data[tileNumberIndex];
-
-        if (tileNumber !== 0) {
-          const framePos = this.framesPos[tileNumber - 1];
           drawTile(
-            p,
-            this.tileset,
+            this.p,
+            this.mapImage,
             currentTilePos.x,
             currentTilePos.y,
-            framePos.x,
-            framePos.y,
-            this.mapData.tilewidth,
-            this.mapData.tilewidth
+            this.tilesPos[tileNumber - 1].x,
+            this.tilesPos[tileNumber - 1].y,
+            this.tileWidth,
+            this.tileHeight
           );
         }
-
-        tileNumberIndex += 1;
-        currentTilePos.x += this.mapData.tilewidth;
       }
-      currentTilePos.x = 0;
-      currentTilePos.y += this.mapData.tilewidth;
     }
   }
 }
