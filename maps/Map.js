@@ -19,7 +19,7 @@ export class TiledMap {
     this.tilesPos = getFramesPos(8, 55, this.tileWidth, this.tileHeight);
   }
 
-  draw() {
+  draw(camera) {
     for (const layer of this.tiledData.layers) {
       if (layer.type === "tilelayer") {
         const currentTilePos = {
@@ -41,8 +41,8 @@ export class TiledMap {
           drawTile(
             this.p,
             this.mapImage,
-            currentTilePos.x,
-            currentTilePos.y,
+            currentTilePos.x + camera.getPosX(),
+            currentTilePos.y + camera.getPosY(),
             this.tilesPos[tileNumber - 1].x,
             this.tilesPos[tileNumber - 1].y,
             this.tileWidth,

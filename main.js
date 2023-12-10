@@ -9,8 +9,8 @@ new p5((p) => {
   const scenes = ["menu", "world", "battle"];
   let currentScene = "menu";
 
+  const camera = new Camera(p, 100, 0);
   const debugMode = new DebugMode(p);
-  const camera = new Camera(0, 0);
 
   const menu = new Menu(p);
   const player = new Player(p, 200, 100);
@@ -37,12 +37,13 @@ new p5((p) => {
         menu.draw();
         break;
       case "world":
+        camera.update();
         p.clear();
         p.background(21);
         p.fill("yellow");
-        map.draw();
+        map.draw(camera);
         player.update();
-        player.draw();
+        player.draw(camera);
         break;
       default:
     }

@@ -85,7 +85,7 @@ export class Player {
     const moveBy = (this.speed / 1000) * this.p.deltaTime;
     this.movePlayer(moveBy);
   }
-  draw() {
+  draw(camera) {
     const animData = this.anims[this.currentAnim];
     let frameData;
     if (typeof animData === "number") {
@@ -111,14 +111,14 @@ export class Player {
     this.p.push();
     if (this.direction === "right") {
       this.p.scale(-1, 1);
-      this.p.translate(-2 * this.x - this.tileWidth, 0);
+      this.p.translate(-2 * (this.x + camera.getPosX()) - this.tileWidth, 0);
     }
     this.p.noSmooth();
     drawTile(
       this.p,
       this.playerSprite,
-      this.x,
-      this.y,
+      this.x + camera.getPosX(),
+      this.y + camera.getPosY(),
       frameData.x,
       frameData.y,
       this.tileWidth,
