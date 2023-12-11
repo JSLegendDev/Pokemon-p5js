@@ -13,7 +13,7 @@ new p5((p) => {
   const debugMode = new DebugMode(p);
 
   const menu = new Menu(p);
-  const player = new Player(p, 200, 100);
+  const player = new Player(p, 150, 200);
   const map = new TiledMap(p, 100, -150);
 
   p.preload = () => {
@@ -29,6 +29,7 @@ new p5((p) => {
     map.prepareTiles();
     player.prepareAnims();
     player.setAnim("idle-down");
+    camera.attachTo(player);
   };
 
   p.draw = () => {
@@ -39,7 +40,7 @@ new p5((p) => {
       case "world":
         camera.update();
         p.clear();
-        p.background(21);
+        p.background(0);
         p.fill("yellow");
         map.draw(camera);
         player.update();

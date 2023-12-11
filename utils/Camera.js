@@ -7,12 +7,13 @@ export class Camera {
     this.prevY = this.y;
   }
 
-  update() {
-    if (this.p.keyIsDown(this.p.RIGHT_ARROW))
-      this.x += (200 / 1000) * this.p.deltaTime;
+  attachTo(entity) {
+    this.entity = entity;
+  }
 
-    if (this.p.keyIsDown(this.p.LEFT_ARROW))
-      this.x -= (200 / 1000) * this.p.deltaTime;
+  update() {
+    this.x = -this.entity.x + this.p.width / 2;
+    this.y = -this.entity.y + this.p.height / 2;
   }
 
   setPosX(x) {
