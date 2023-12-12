@@ -15,6 +15,15 @@ export class Player {
     this.speed = 200;
     this.x = x;
     this.y = y;
+    this.hitbox = {
+      tag: "player",
+      x: this.x,
+      y: this.y,
+      width: 32,
+      height: 32,
+      offsetX: 0,
+      offsetY: 10,
+    };
   }
   loadAssets() {
     this.playerSprite = this.p.loadImage("assets/boy_run.png");
@@ -108,6 +117,9 @@ export class Player {
       }
     }
 
+    this.hitbox.x = this.x + this.hitbox.offsetX + camera.getPosX();
+    this.hitbox.y = this.y + this.hitbox.offsetY + camera.getPosY();
+
     this.p.push();
     if (this.direction === "right") {
       this.p.scale(-1, 1);
@@ -125,5 +137,8 @@ export class Player {
       this.tileHeight
     );
     this.p.pop();
+  }
+  getHitbox() {
+    return this.hitbox;
   }
 }

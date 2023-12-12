@@ -3,6 +3,8 @@ import { Menu } from "./scenes/Menu.js";
 import { TiledMap } from "./maps/Map.js";
 import { DebugMode } from "./utils/DebugMode.js";
 import { Camera } from "./utils/Camera.js";
+import { TestBox } from "./entities/TestBox.js";
+import { CollisionManager } from "./utils/CollisionManager.js";
 
 new p5((p) => {
   let font;
@@ -15,6 +17,11 @@ new p5((p) => {
   const menu = new Menu(p);
   const player = new Player(p, 150, 200);
   const map = new TiledMap(p, 100, -150);
+  const testBox = new TestBox(p, 100, 100, 30, 30);
+
+  const collisionManager = new CollisionManager();
+  collisionManager.addCollidable(player.hitbox);
+  collisionManager.addCollidable(testBox);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
@@ -43,8 +50,12 @@ new p5((p) => {
         p.background(0);
         p.fill("yellow");
         map.draw(camera);
+        testBox.draw(camera);
         player.update();
+        debugMode.drawHitbox(player.hitbox);
         player.draw(camera);
+        console.log(collisionManager.checkCollisionsFor(player.hitbox));
+
         break;
       default:
     }

@@ -15,4 +15,14 @@ export class DebugMode {
   toggle() {
     this.enabled = !this.enabled;
   }
+
+  drawHitbox(hitbox) {
+    if (!this.enabled) return;
+    this.p.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+  }
+
+  drawTestCollider(camera) {
+    if (!this.enabled) return;
+    this.p.rect(100 + camera.getPosX(), 100 + camera.getPosY(), 30, 30);
+  }
 }
