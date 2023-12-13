@@ -126,28 +126,34 @@ export class Player {
     const moveBy = (this.speed / 1000) * this.p.deltaTime;
     this.movePlayer(moveBy);
   }
-  draw(camera) {
-    const animData = this.anims[this.currentAnim];
-    let frameData;
+
+  setAnimFrame(animData) {
     if (typeof animData === "number") {
       this.currentFrame = animData;
-      frameData = this.frames[this.currentFrame];
-    } else {
-      if (this.currentFrame === 0) {
-        this.currentFrame = animData.from;
-      }
-
-      if (this.currentFrame > animData.to && animData.loop) {
-        this.currentFrame = animData.from;
-      }
-
-      frameData = this.frames[this.currentFrame];
-
-      if (this.animationTimer >= 1000 / animData.speed) {
-        this.currentFrame++;
-        this.animationTimer -= 1000 / animData.speed;
-      }
+      return this.frames[this.currentFrame];
     }
+
+    if (this.currentFrame === 0) {
+      this.currentFrame = animData.from;
+    }
+
+    if (this.currentFrame > animData.to && animData.loop) {
+      this.currentFrame = animData.from;
+    }
+
+    const currentFrame = this.frames[this.currentFrame];
+
+    if (this.animationTimer >= 1000 / animData.speed) {
+      this.currentFrame++;
+      this.animationTimer -= 1000 / animData.speed;
+    }
+
+    return currentFrame;
+  }
+
+  draw(camera) {
+    const animData = this.anims[this.currentAnim];
+    const frameData = this.setAnimFrame(animData);
 
     this.hitbox.screenX = this.x + this.hitbox.offsetX + camera.getPosX();
     this.hitbox.screenY = this.y + this.hitbox.offsetY + camera.getPosY();
