@@ -4,16 +4,17 @@ export class TestBox {
     this.tag = "box";
     this.x = x;
     this.y = y;
-    this.worldX = this.x;
-    this.worldY = this.y;
+    this.screenX = this.x;
+    this.screenY = this.y;
     this.width = width;
     this.height = height;
+    this.isColliding = false;
   }
 
   draw(camera) {
-    this.worldX = this.x + camera.getPosX();
-    this.worldY = this.y + camera.getPosY();
+    this.screenX = this.x + camera.getPosX();
+    this.screenY = this.y + camera.getPosY();
 
-    this.p.rect(this.worldX, this.worldY, this.width, this.height);
+    this.p.rect(this.screenX, this.screenY, this.width, this.height);
   }
 }

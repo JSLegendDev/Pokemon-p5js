@@ -19,11 +19,15 @@ export class Player {
       tag: "player",
       x: this.x,
       y: this.y,
+      screenX: this.x,
+      screenY: this.y,
       width: 32,
       height: 32,
       offsetX: 0,
       offsetY: 10,
     };
+    this.isColliding = false;
+    this.directionOnCollision = "down";
   }
   loadAssets() {
     this.playerSprite = this.p.loadImage("assets/boy_run.png");
@@ -66,25 +70,41 @@ export class Player {
     if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
       if (this.direction !== "right") this.direction = "right";
       if (this.currentAnim !== "run-side") this.setAnim("run-side");
-      this.x += moveBy;
+      if (
+        (this.isColliding && this.directionOnCollision !== "right") ||
+        !this.isColliding
+      )
+        this.x += moveBy;
     }
 
     if (this.p.keyIsDown(this.p.LEFT_ARROW)) {
       if (this.direction !== "left") this.direction = "left";
       if (this.currentAnim !== "run-side") this.setAnim("run-side");
-      this.x -= moveBy;
+      if (
+        (this.isColliding && this.directionOnCollision !== "left") ||
+        !this.isColliding
+      )
+        this.x -= moveBy;
     }
 
     if (this.p.keyIsDown(this.p.UP_ARROW)) {
       if (this.direction !== "up") this.direction = "up";
       if (this.currentAnim !== "run-up") this.setAnim("run-up");
-      this.y -= moveBy;
+      if (
+        (this.isColliding && this.directionOnCollision !== "up") ||
+        !this.isColliding
+      )
+        this.y -= moveBy;
     }
 
     if (this.p.keyIsDown(this.p.DOWN_ARROW)) {
       if (this.direction !== "down") this.direction = "down";
       if (this.currentAnim !== "run-down") this.setAnim("run-down");
-      this.y += moveBy;
+      if (
+        (this.isColliding && this.directionOnCollision !== "down") ||
+        !this.isColliding
+      )
+        this.y += moveBy;
     }
   }
   update() {
@@ -117,8 +137,8 @@ export class Player {
       }
     }
 
-    this.hitbox.x = this.x + this.hitbox.offsetX + camera.getPosX();
-    this.hitbox.y = this.y + this.hitbox.offsetY + camera.getPosY();
+    this.hitbox.screenX = this.x + this.hitbox.offsetX + camera.getPosX();
+    this.hitbox.screenY = this.y + this.hitbox.offsetY + camera.getPosY();
 
     this.p.push();
     if (this.direction === "right") {

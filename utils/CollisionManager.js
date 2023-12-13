@@ -9,10 +9,10 @@ export class CollisionManager {
 
   checkCollision(A, B) {
     if (
-      A.worldX + A.width >= B.x &&
-      A.worldX <= B.x + B.width &&
-      A.worldY + A.height >= B.y &&
-      A.worldY <= B.y + B.height
+      A.screenX + A.width > B.screenX &&
+      A.screenX < B.screenX + B.width &&
+      A.screenY + A.height > B.screenY &&
+      A.screenY < B.screenY + B.height
     ) {
       return true;
     }
@@ -20,13 +20,15 @@ export class CollisionManager {
 
   checkCollisionsFor(object) {
     for (const collidable of this.collidables) {
-      if (collidable.tag === object.tag) continue;
+      if (collidable.tag === object.hitbox.tag) continue;
 
-      if (this.checkCollision(collidable, object)) {
-        return true;
+      if (this.checkCollision(collidable, object.hitbox)) {
+        object.isColliding = true;
+        object.directionOnCollision = object.direction;
+        return;
       }
     }
 
-    return false;
+    object.isColliding = false;
   }
 }

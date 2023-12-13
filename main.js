@@ -17,7 +17,7 @@ new p5((p) => {
   const menu = new Menu(p);
   const player = new Player(p, 150, 200);
   const map = new TiledMap(p, 100, -150);
-  const testBox = new TestBox(p, 100, 100, 30, 30);
+  const testBox = new TestBox(p, 100, 100, 30, 60);
 
   const collisionManager = new CollisionManager();
   collisionManager.addCollidable(player.hitbox);
@@ -54,7 +54,7 @@ new p5((p) => {
         player.update();
         debugMode.drawHitbox(player.hitbox);
         player.draw(camera);
-        console.log(collisionManager.checkCollisionsFor(player.hitbox));
+        collisionManager.checkCollisionsFor(player);
 
         break;
       default:

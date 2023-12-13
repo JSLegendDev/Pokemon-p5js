@@ -18,7 +18,7 @@ export class DebugMode {
 
   drawHitbox(hitbox) {
     if (!this.enabled) return;
-    this.p.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+    this.p.rect(hitbox.screenX, hitbox.screenY, hitbox.width, hitbox.height);
   }
 
   drawTestCollider(camera) {
