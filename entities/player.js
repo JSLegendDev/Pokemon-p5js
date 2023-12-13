@@ -68,43 +68,47 @@ export class Player {
     }
 
     if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
-      if (this.direction !== "right") this.direction = "right";
-      if (this.currentAnim !== "run-side") this.setAnim("run-side");
       if (
         (this.isColliding && this.directionOnCollision !== "right") ||
         !this.isColliding
-      )
+      ) {
+        if (this.direction !== "right") this.direction = "right";
+        if (this.currentAnim !== "run-side") this.setAnim("run-side");
         this.x += moveBy;
+      }
     }
 
     if (this.p.keyIsDown(this.p.LEFT_ARROW)) {
-      if (this.direction !== "left") this.direction = "left";
-      if (this.currentAnim !== "run-side") this.setAnim("run-side");
       if (
         (this.isColliding && this.directionOnCollision !== "left") ||
         !this.isColliding
-      )
+      ) {
+        if (this.direction !== "left") this.direction = "left";
+        if (this.currentAnim !== "run-side") this.setAnim("run-side");
         this.x -= moveBy;
+      }
     }
 
     if (this.p.keyIsDown(this.p.UP_ARROW)) {
-      if (this.direction !== "up") this.direction = "up";
-      if (this.currentAnim !== "run-up") this.setAnim("run-up");
       if (
         (this.isColliding && this.directionOnCollision !== "up") ||
         !this.isColliding
-      )
+      ) {
+        if (this.direction !== "up") this.direction = "up";
+        if (this.currentAnim !== "run-up") this.setAnim("run-up");
         this.y -= moveBy;
+      }
     }
 
     if (this.p.keyIsDown(this.p.DOWN_ARROW)) {
-      if (this.direction !== "down") this.direction = "down";
-      if (this.currentAnim !== "run-down") this.setAnim("run-down");
       if (
         (this.isColliding && this.directionOnCollision !== "down") ||
         !this.isColliding
-      )
+      ) {
+        if (this.direction !== "down") this.direction = "down";
+        if (this.currentAnim !== "run-down") this.setAnim("run-down");
         this.y += moveBy;
+      }
     }
   }
   update() {
