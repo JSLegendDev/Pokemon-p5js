@@ -20,7 +20,7 @@ new p5((p) => {
   const testBox = new TestBox(p, 100, 100, 30, 60);
 
   const collisionManager = new CollisionManager();
-  collisionManager.addCollidable(player.hitbox);
+  collisionManager.addCollidable(player.getHitbox());
   collisionManager.addCollidable(testBox);
 
   p.preload = () => {
@@ -52,7 +52,7 @@ new p5((p) => {
         map.draw(camera);
         testBox.draw(camera);
         player.update();
-        debugMode.drawHitbox(player.hitbox);
+        debugMode.drawHitbox(player.getHitbox());
         player.draw(camera);
         collisionManager.checkCollisionsFor(player);
 

@@ -50,7 +50,8 @@ export class Player {
     this.animationTimer = 0;
     this.previousTime = 0;
   }
-  movePlayer(moveBy) {
+
+  isMaxOneKeyDown() {
     let isOnlyOneKeyDown = false;
     for (const key of [
       this.p.RIGHT_ARROW,
@@ -58,14 +59,21 @@ export class Player {
       this.p.UP_ARROW,
       this.p.DOWN_ARROW,
     ]) {
-      if (isOnlyOneKeyDown && this.p.keyIsDown(key)) {
-        return;
-      }
-
       if (!isOnlyOneKeyDown && this.p.keyIsDown(key)) {
         isOnlyOneKeyDown = true;
+        continue;
+      }
+
+      if (isOnlyOneKeyDown && this.p.keyIsDown(key)) {
+        return false;
       }
     }
+
+    return true;
+  }
+
+  movePlayer(moveBy) {
+    if (!this.isMaxOneKeyDown()) return;
 
     if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
       if (
