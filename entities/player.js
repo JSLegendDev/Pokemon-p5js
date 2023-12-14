@@ -21,7 +21,8 @@ export class Player {
     this.screenY = y;
     this.width = 32;
     this.height = 32;
-    this.isColliding = false;
+    this.spriteX = 0;
+    this.spriteY = -15;
   }
   loadAssets() {
     this.playerSprite = this.p.loadImage("assets/boy_run.png");
@@ -143,8 +144,8 @@ export class Player {
     drawTile(
       this.p,
       this.playerSprite,
-      this.screenX,
-      this.screenY,
+      this.screenX + this.spriteX,
+      this.screenY + this.spriteY,
       this.currentFrameData.x,
       this.currentFrameData.y,
       this.tileWidth,
