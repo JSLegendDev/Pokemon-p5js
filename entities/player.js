@@ -1,3 +1,4 @@
+import { debugMode } from "../utils/DebugMode.js";
 import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
 
 export class Player {
@@ -8,6 +9,7 @@ export class Player {
     this.anims = {};
     this.currentAnim = null;
     this.currentFrame = 0;
+    this.currentFrameData = null;
     this.animationTimer = 0;
     this.tileWidth = 32;
     this.tileHeight = 48;
@@ -15,19 +17,10 @@ export class Player {
     this.speed = 200;
     this.x = x;
     this.y = y;
-    this.hitbox = {
-      tag: "player",
-      x: this.x,
-      y: this.y,
-      screenX: this.x,
-      screenY: this.y,
-      width: 32,
-      height: 32,
-      offsetX: 0,
-      offsetY: 10,
-    };
-    this.isColliding = false;
-    this.directionOnCollision = "down";
+    this.screenX = x;
+    this.screenY = y;
+    this.width = 32;
+    this.height = 32;
   }
   loadAssets() {
     this.playerSprite = this.p.loadImage("assets/boy_run.png");
@@ -76,55 +69,28 @@ export class Player {
     if (!this.isMaxOneKeyDown()) return;
 
     if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
-      if (
-        (this.isColliding && this.directionOnCollision !== "right") ||
-        !this.isColliding
-      ) {
-        if (this.direction !== "right") this.direction = "right";
-        if (this.currentAnim !== "run-side") this.setAnim("run-side");
-        this.x += moveBy;
-      }
+      if (this.direction !== "right") this.direction = "right";
+      if (this.currentAnim !== "run-side") this.setAnim("run-side");
+      this.x += moveBy;
     }
 
     if (this.p.keyIsDown(this.p.LEFT_ARROW)) {
-      if (
-        (this.isColliding && this.directionOnCollision !== "left") ||
-        !this.isColliding
-      ) {
-        if (this.direction !== "left") this.direction = "left";
-        if (this.currentAnim !== "run-side") this.setAnim("run-side");
-        this.x -= moveBy;
-      }
+      if (this.direction !== "left") this.direction = "left";
+      if (this.currentAnim !== "run-side") this.setAnim("run-side");
+      this.x -= moveBy;
     }
 
     if (this.p.keyIsDown(this.p.UP_ARROW)) {
-      if (
-        (this.isColliding && this.directionOnCollision !== "up") ||
-        !this.isColliding
-      ) {
-        if (this.direction !== "up") this.direction = "up";
-        if (this.currentAnim !== "run-up") this.setAnim("run-up");
-        this.y -= moveBy;
-      }
+      if (this.direction !== "up") this.direction = "up";
+      if (this.currentAnim !== "run-up") this.setAnim("run-up");
+      this.y -= moveBy;
     }
 
     if (this.p.keyIsDown(this.p.DOWN_ARROW)) {
-      if (
-        (this.isColliding && this.directionOnCollision !== "down") ||
-        !this.isColliding
-      ) {
-        if (this.direction !== "down") this.direction = "down";
-        if (this.currentAnim !== "run-down") this.setAnim("run-down");
-        this.y += moveBy;
-      }
+      if (this.direction !== "down") this.direction = "down";
+      if (this.currentAnim !== "run-down") this.setAnim("run-down");
+      this.y += moveBy;
     }
-  }
-  update() {
-    this.previousTime = this.animationTimer;
-    this.animationTimer += this.p.deltaTime;
-
-    const moveBy = (this.speed / 1000) * this.p.deltaTime;
-    this.movePlayer(moveBy);
   }
 
   setAnimFrame(animData) {
@@ -151,26 +117,35 @@ export class Player {
     return currentFrame;
   }
 
-  draw(camera) {
+  update(camera) {
+    this.previousTime = this.animationTimer;
+    this.animationTimer += this.p.deltaTime;
+
+    const moveBy = (this.speed / 1000) * this.p.deltaTime;
+    this.movePlayer(moveBy);
+
     const animData = this.anims[this.currentAnim];
-    const frameData = this.setAnimFrame(animData);
+    this.currentFrameData = this.setAnimFrame(animData);
 
-    this.hitbox.screenX = this.x + this.hitbox.offsetX + camera.getPosX();
-    this.hitbox.screenY = this.y + this.hitbox.offsetY + camera.getPosY();
+    this.screenX = this.x + camera.getPosX();
+    this.screenY = this.y + camera.getPosY();
+  }
 
+  draw() {
     this.p.push();
     if (this.direction === "right") {
       this.p.scale(-1, 1);
-      this.p.translate(-2 * (this.x + camera.getPosX()) - this.tileWidth, 0);
+      this.p.translate(-2 * this.screenX - this.tileWidth, 0);
     }
     this.p.noSmooth();
+    debugMode.drawHitbox(this.p, this);
     drawTile(
       this.p,
       this.playerSprite,
-      this.x + camera.getPosX(),
-      this.y + camera.getPosY(),
-      frameData.x,
-      frameData.y,
+      this.screenX,
+      this.screenY,
+      this.currentFrameData.x,
+      this.currentFrameData.y,
       this.tileWidth,
       this.tileHeight
     );

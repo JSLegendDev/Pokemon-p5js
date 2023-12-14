@@ -1,28 +1,25 @@
 export class DebugMode {
-  constructor(p, font) {
-    this.p = p;
-    this.font = font;
+  constructor() {
     this.enabled = false;
   }
 
-  drawFpsCounter(font) {
+  drawFpsCounter(p, font) {
     if (!this.enabled) return;
-    this.p.textFont(font);
-    this.p.textSize(24);
-    this.p.text(Math.trunc(this.p.frameRate()), 10, 20);
+    p.fill("yellow");
+    p.textFont(font);
+    p.textSize(24);
+    p.text(Math.trunc(p.frameRate()), 10, 20);
   }
 
   toggle() {
     this.enabled = !this.enabled;
   }
 
-  drawHitbox(hitbox) {
+  drawHitbox(p, hitbox) {
     if (!this.enabled) return;
-    this.p.rect(hitbox.screenX, hitbox.screenY, hitbox.width, hitbox.height);
-  }
-
-  drawTestCollider(camera) {
-    if (!this.enabled) return;
-    this.p.rect(100 + camera.getPosX(), 100 + camera.getPosY(), 30, 30);
+    p.fill(255, 0, 0, 63);
+    p.rect(hitbox.screenX, hitbox.screenY, hitbox.width, hitbox.height);
   }
 }
+
+export const debugMode = new DebugMode();

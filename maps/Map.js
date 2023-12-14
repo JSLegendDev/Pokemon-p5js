@@ -1,3 +1,4 @@
+import { Collidable } from "../entities/Collidable.js";
 import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
 
 export class TiledMap {
@@ -19,7 +20,7 @@ export class TiledMap {
     this.tilesPos = getFramesPos(8, 55, this.tileWidth, this.tileHeight);
   }
 
-  draw(camera) {
+  draw(camera, player) {
     for (const layer of this.tiledData.layers) {
       if (layer.type === "tilelayer") {
         const currentTilePos = {
@@ -48,6 +49,21 @@ export class TiledMap {
             this.tileWidth,
             this.tileHeight
           );
+        }
+      }
+
+      if (layer.type === "objectgroup" && layer.name === "Boundaries") {
+        for (const boundary of layer.objects) {
+          const collidable = new Collidable(
+            this.p,
+            boundary.x,
+            this.y + boundary.y + 32,
+            boundary.width,
+            boundary.height
+          );
+          collidable.preventPassthroughFrom(player);
+          collidable.update(camera);
+          collidable.draw();
         }
       }
     }
