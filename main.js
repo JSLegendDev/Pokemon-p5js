@@ -40,8 +40,8 @@ new p5((p) => {
         camera.update();
         p.clear();
         p.background(0);
+        player.update(); // this being before the map draw call is important
         map.draw(camera, player);
-        player.update(camera);
         player.draw(camera);
         break;
       default:

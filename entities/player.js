@@ -21,6 +21,7 @@ export class Player {
     this.screenY = y;
     this.width = 32;
     this.height = 32;
+    this.isColliding = false;
   }
   loadAssets() {
     this.playerSprite = this.p.loadImage("assets/boy_run.png");
@@ -117,7 +118,7 @@ export class Player {
     return currentFrame;
   }
 
-  update(camera) {
+  update() {
     this.previousTime = this.animationTimer;
     this.animationTimer += this.p.deltaTime;
 
@@ -126,12 +127,12 @@ export class Player {
 
     const animData = this.anims[this.currentAnim];
     this.currentFrameData = this.setAnimFrame(animData);
-
-    this.screenX = this.x + camera.getPosX();
-    this.screenY = this.y + camera.getPosY();
   }
 
-  draw() {
+  draw(camera) {
+    this.screenX = this.x + camera.getPosX();
+    this.screenY = this.y + camera.getPosY();
+
     this.p.push();
     if (this.direction === "right") {
       this.p.scale(-1, 1);
