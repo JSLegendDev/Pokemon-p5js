@@ -26,6 +26,13 @@ new p5((p) => {
     const canvasEl = p.createCanvas(512, 384);
     canvasEl.canvas.style = "";
     map.prepareTiles();
+    const spawnPoints = map.getSpawnPoints();
+    for (const spawnPoint of spawnPoints) {
+      if (spawnPoint.name === "player") {
+        player.x = spawnPoint.x;
+        player.y = map.y + spawnPoint.y + 32;
+      }
+    }
     player.prepareAnims();
     player.setAnim("idle-down");
     camera.attachTo(player);

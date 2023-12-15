@@ -20,6 +20,14 @@ export class TiledMap {
     this.tilesPos = getFramesPos(8, 55, this.tileWidth, this.tileHeight);
   }
 
+  getSpawnPoints() {
+    for (const layer of this.tiledData.layers) {
+      if (layer.name === "SpawnPoints") {
+        return layer.objects;
+      }
+    }
+  }
+
   draw(camera, player) {
     for (const layer of this.tiledData.layers) {
       if (layer.type === "tilelayer") {
