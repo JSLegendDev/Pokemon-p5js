@@ -1,16 +1,19 @@
 import { characterProps, characterInterface } from "./character.js";
 import { debugMode } from "../utils/debugMode.js";
 import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
+import { checkCollision, preventOverlap } from "../utils/collisionLogic.js";
 
 export function makeNPC(p, x, y) {
   return {
     p,
     x,
     y,
+    screenX: x,
+    screenY: y,
     spriteX: 0,
     spriteY: -15,
     ...characterProps,
-    loadAssets() {
+    load() {
       this.spriteRef = characterInterface.loadAssets(
         this.p,
         "assets/trainer_GENTLEMAN.png"
@@ -52,7 +55,15 @@ export function makeNPC(p, x, y) {
         this.tileWidth,
         this.tileHeight
       );
-      this.p.pop();
+    },
+
+    handleCollisionsWith(entity) {
+      const collision = checkCollision(this, entity);
+
+      if (collision) {
+        preventOverlap(this, entity);
+        entity.freeze = true;
+      }
     },
   };
 }

@@ -225,6 +225,18 @@
                  "type":"",
                  "visible":true,
                  "width":0,
+                 "x":320,
+                 "y":320
+                }, 
+                {
+                 "height":0,
+                 "id":18,
+                 "name":"npc",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
                  "x":160,
                  "y":160
                 }],
@@ -235,7 +247,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":18,
+ "nextobjectid":19,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

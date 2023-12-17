@@ -15,6 +15,7 @@ export function makePlayer(p, x, y) {
     screenY: y,
     spriteX: 0,
     spriteY: -15,
+    freeze: false,
     load() {
       this.spriteRef = characterInterface.loadAssets(
         this.p,
@@ -40,7 +41,7 @@ export function makePlayer(p, x, y) {
     },
 
     movePlayer(moveBy) {
-      if (!isMaxOneKeyDown(this.p)) return;
+      if (!isMaxOneKeyDown(this.p) || this.freeze) return;
 
       if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
         if (this.direction !== "right") this.direction = "right";

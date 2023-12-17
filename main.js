@@ -3,6 +3,7 @@ import { makeMenu } from "./scenes/menu.js";
 import { makeTiledMap } from "./maps/map.js";
 import { debugMode } from "./utils/debugMode.js";
 import { makeCamera } from "./utils/camera.js";
+import { makeNPC } from "./entities/NPC.js";
 
 new p5((p) => {
   let font;
@@ -12,7 +13,8 @@ new p5((p) => {
   const camera = makeCamera(p, 100, 0);
 
   const menu = makeMenu(p);
-  const player = makePlayer(p, 150, 200);
+  const player = makePlayer(p, 0, 0);
+  const npc = makeNPC(p, 150, 200);
   const map = makeTiledMap(p, 100, -150);
 
   p.preload = () => {
@@ -20,6 +22,7 @@ new p5((p) => {
     map.load("./assets/Trainer Tower interior.png", "./maps/world.json");
     menu.loadAssets();
     player.load();
+    npc.load();
   };
 
   p.setup = () => {
@@ -28,14 +31,24 @@ new p5((p) => {
     map.prepareTiles();
     const spawnPoints = map.getSpawnPoints();
     for (const spawnPoint of spawnPoints) {
-      if (spawnPoint.name === "player") {
-        player.x = spawnPoint.x;
-        player.y = map.y + spawnPoint.y + 32;
+      switch (spawnPoint.name) {
+        case "player":
+          player.x = spawnPoint.x;
+          player.y = map.y + spawnPoint.y + 32;
+          break;
+        case "npc":
+          npc.x = spawnPoint.x;
+          npc.y = map.y + spawnPoint.y + 32;
+          break;
+        default:
       }
     }
     player.prepareAnims();
     player.setAnim("idle-down");
     camera.attachTo(player);
+
+    npc.prepareAnims();
+    npc.setAnim("idle-down");
   };
 
   p.draw = () => {
@@ -48,7 +61,10 @@ new p5((p) => {
         p.clear();
         p.background(0);
         player.update(); // this being before the map draw call is important
+        npc.update();
+        npc.handleCollisionsWith(player);
         map.draw(camera, player);
+        npc.draw(camera);
         player.draw(camera);
         break;
       default:
