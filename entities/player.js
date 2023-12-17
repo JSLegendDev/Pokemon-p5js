@@ -13,8 +13,6 @@ export function makePlayer(p, x, y) {
     y,
     screenX: x,
     screenY: y,
-    width: 32,
-    height: 32,
     spriteX: 0,
     spriteY: -15,
     load() {

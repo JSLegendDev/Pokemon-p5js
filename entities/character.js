@@ -7,6 +7,8 @@ export const characterProps = {
   animationTimer: 0,
   tileWidth: 32,
   tileHeight: 48,
+  width: 32,
+  height: 32,
 };
 
 export const characterInterface = {
