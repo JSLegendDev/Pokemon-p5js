@@ -3,7 +3,7 @@ export function makeMenu(p) {
     p,
     startScreen: null,
     startTextImg: null,
-    easings: 0.5,
+    easing: 0.5,
     alpha: 255,
     blinkBack: false,
     loadAssets() {

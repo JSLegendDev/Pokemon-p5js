@@ -19,7 +19,7 @@ new p5((p) => {
     font = p.loadFont("./power-clear.ttf");
     map.load("./assets/Trainer Tower interior.png", "./maps/world.json");
     menu.loadAssets();
-    player.loadAssets();
+    player.load();
   };
 
   p.setup = () => {

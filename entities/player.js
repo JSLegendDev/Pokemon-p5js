@@ -1,17 +1,12 @@
 import { debugMode } from "../utils/debugMode.js";
 import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
+import { characterProps, characterInterface } from "./Character.js";
+import { isMaxOneKeyDown } from "../utils/input.js";
 
 export function makePlayer(p, x, y) {
   return {
     p,
-    playerSprite: null,
-    anims: {},
-    currentAnim: null,
-    currentFrame: 0,
-    currentFrameData: null,
-    animationTimer: 0,
-    tileWidth: 32,
-    tileHeight: 48,
+    ...characterProps,
     direction: "down",
     speed: 200,
     x,
@@ -22,8 +17,11 @@ export function makePlayer(p, x, y) {
     height: 32,
     spriteX: 0,
     spriteY: -15,
-    loadAssets() {
-      this.playerSprite = this.p.loadImage("assets/boy_run.png");
+    load() {
+      this.spriteRef = characterInterface.loadAssets(
+        this.p,
+        "assets/boy_run.png"
+      );
     },
 
     prepareAnims() {
@@ -40,35 +38,11 @@ export function makePlayer(p, x, y) {
     },
 
     setAnim(name) {
-      this.currentAnim = name;
-      this.currentFrame = 0;
-      this.animationTimer = 0;
-      this.previousTime = 0;
-    },
-
-    isMaxOneKeyDown() {
-      let isOnlyOneKeyDown = false;
-      for (const key of [
-        this.p.RIGHT_ARROW,
-        this.p.LEFT_ARROW,
-        this.p.UP_ARROW,
-        this.p.DOWN_ARROW,
-      ]) {
-        if (!isOnlyOneKeyDown && this.p.keyIsDown(key)) {
-          isOnlyOneKeyDown = true;
-          continue;
-        }
-
-        if (isOnlyOneKeyDown && this.p.keyIsDown(key)) {
-          return false;
-        }
-      }
-
-      return true;
+      characterInterface.setAnim(this, name);
     },
 
     movePlayer(moveBy) {
-      if (!this.isMaxOneKeyDown()) return;
+      if (!isMaxOneKeyDown(this.p)) return;
 
       if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
         if (this.direction !== "right") this.direction = "right";
@@ -95,30 +69,6 @@ export function makePlayer(p, x, y) {
       }
     },
 
-    setAnimFrame(animData) {
-      if (typeof animData === "number") {
-        this.currentFrame = animData;
-        return this.frames[this.currentFrame];
-      }
-
-      if (this.currentFrame === 0) {
-        this.currentFrame = animData.from;
-      }
-
-      if (this.currentFrame > animData.to && animData.loop) {
-        this.currentFrame = animData.from;
-      }
-
-      const currentFrame = this.frames[this.currentFrame];
-
-      if (this.animationTimer >= 1000 / animData.speed) {
-        this.currentFrame++;
-        this.animationTimer -= 1000 / animData.speed;
-      }
-
-      return currentFrame;
-    },
-
     update() {
       this.previousTime = this.animationTimer;
       this.animationTimer += this.p.deltaTime;
@@ -127,7 +77,7 @@ export function makePlayer(p, x, y) {
       this.movePlayer(moveBy);
 
       const animData = this.anims[this.currentAnim];
-      this.currentFrameData = this.setAnimFrame(animData);
+      this.currentFrameData = characterInterface.setAnimFrame(this, animData);
     },
 
     draw(camera) {
@@ -143,7 +93,7 @@ export function makePlayer(p, x, y) {
       debugMode.drawHitbox(this.p, this);
       drawTile(
         this.p,
-        this.playerSprite,
+        this.spriteRef,
         this.screenX + this.spriteX,
         this.screenY + this.spriteY,
         this.currentFrameData.x,
