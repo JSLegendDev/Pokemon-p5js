@@ -1,19 +1,19 @@
-import { Player } from "./entities/Player.js";
-import { Menu } from "./scenes/Menu.js";
-import { TiledMap } from "./maps/Map.js";
-import { debugMode } from "./utils/DebugMode.js";
-import { Camera } from "./utils/Camera.js";
+import { makePlayer } from "./entities/player.js";
+import { makeMenu } from "./scenes/menu.js";
+import { makeTiledMap } from "./maps/map.js";
+import { debugMode } from "./utils/debugMode.js";
+import { makeCamera } from "./utils/camera.js";
 
 new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
   let currentScene = "menu";
 
-  const camera = new Camera(p, 100, 0);
+  const camera = makeCamera(p, 100, 0);
 
-  const menu = new Menu(p);
-  const player = new Player(p, 150, 200);
-  const map = new TiledMap(p, 100, -150);
+  const menu = makeMenu(p);
+  const player = makePlayer(p, 150, 200);
+  const map = makeTiledMap(p, 100, -150);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
