@@ -57,12 +57,13 @@ export function makeNPC(p, x, y) {
       );
     },
 
-    handleCollisionsWith(entity) {
+    handleCollisionsWith(entity, collisionEvent) {
       const collision = checkCollision(this, entity);
 
       if (collision) {
         preventOverlap(this, entity);
         entity.freeze = true;
+        collisionEvent();
       }
     },
   };

@@ -45,8 +45,8 @@ export function makeTiledMap(p, x, y) {
             drawTile(
               this.p,
               this.mapImage,
-              currentTilePos.x + camera.x,
-              currentTilePos.y + camera.y,
+              Math.round(currentTilePos.x + camera.x),
+              Math.round(currentTilePos.y + camera.y),
               this.tilesPos[tileNumber - 1].x,
               this.tilesPos[tileNumber - 1].y,
               this.tileWidth,

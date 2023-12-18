@@ -6,7 +6,7 @@ export function makeMenu(p) {
     easing: 0.5,
     alpha: 255,
     blinkBack: false,
-    loadAssets() {
+    load() {
       this.startScreen = this.p.loadImage("assets/title.png");
       this.startTextImg = this.p.loadImage("assets/start.png");
     },
