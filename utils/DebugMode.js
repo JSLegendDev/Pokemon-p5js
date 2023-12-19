@@ -1,10 +1,9 @@
 function makeDebugMode() {
   return {
     enabled: false,
-    drawFpsCounter(p, font) {
+    drawFpsCounter(p) {
       if (!this.enabled) return;
       p.fill("yellow");
-      p.textFont(font);
       p.textSize(24);
       p.text(Math.trunc(p.frameRate()), 10, 20);
     },

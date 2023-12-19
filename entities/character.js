@@ -5,6 +5,7 @@ export const characterProps = {
   currentFrame: 0,
   currentFrameData: null,
   animationTimer: 0,
+  previousTime: 0,
   tileWidth: 32,
   tileHeight: 48,
   width: 32,
@@ -39,9 +40,10 @@ export const characterInterface = {
 
     const currentFrame = context.frames[context.currentFrame];
 
-    if (context.animationTimer >= 1000 / animData.speed) {
+    const durationPerFrame = 1000 / animData.speed;
+    if (context.animationTimer >= durationPerFrame) {
       context.currentFrame++;
-      context.animationTimer -= 1000 / animData.speed;
+      context.animationTimer -= durationPerFrame;
     }
 
     return currentFrame;

@@ -49,11 +49,16 @@ export function makeWorld(p) {
       this.player.update(); // this being before the map draw call is important
       this.npc.update();
       this.npc.handleCollisionsWith(this.player, () => {
+        this.dialogBox.setText("I see that you need training.\nLet's battle!");
         this.dialogBox.setVisibility(true);
+        this.dialogBox.onComplete(() => {
+          setTimeout(() => this.dialogBox.setVisibility(false), 1000);
+        });
       });
       this.map.draw(this.camera, this.player);
       this.npc.draw(this.camera);
       this.player.draw(this.camera);
+      this.dialogBox.update();
       this.dialogBox.draw();
     },
 

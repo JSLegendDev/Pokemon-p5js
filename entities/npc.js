@@ -58,6 +58,10 @@ export function makeNPC(p, x, y) {
     },
 
     handleCollisionsWith(entity, collisionEvent) {
+      // If the player has already collided and is frozen due to dialog
+      // no need to recompute collision
+      if (entity.freeze) return;
+
       const collision = checkCollision(this, entity);
 
       if (collision) {

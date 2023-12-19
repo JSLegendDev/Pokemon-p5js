@@ -1,6 +1,6 @@
 import { debugMode } from "../utils/debugMode.js";
 import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
-import { characterProps, characterInterface } from "./Character.js";
+import { characterProps, characterInterface } from "./character.js";
 import { isMaxOneKeyDown } from "../utils/input.js";
 
 export function makePlayer(p, x, y) {

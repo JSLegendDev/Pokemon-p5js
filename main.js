@@ -19,6 +19,9 @@ new p5((p) => {
   p.setup = () => {
     const canvasEl = p.createCanvas(512, 384);
     canvasEl.canvas.style = "";
+
+    p.textFont(font);
+
     world.setup();
   };
 
@@ -33,7 +36,7 @@ new p5((p) => {
       default:
     }
 
-    debugMode.drawFpsCounter(p, font);
+    debugMode.drawFpsCounter(p);
   };
 
   p.keyPressed = () => {
