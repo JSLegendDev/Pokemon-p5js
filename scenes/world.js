@@ -47,15 +47,6 @@ export function makeWorld(p, setScene) {
     },
 
     draw() {
-      if (this.alpha <= 0) this.blinkBack = true;
-      if (this.alpha >= 255) this.blinkBack = false;
-
-      if (this.blinkBack) {
-        this.alpha += 0.7 * this.easing * this.p.deltaTime;
-      } else {
-        this.alpha -= 0.7 * this.easing * this.p.deltaTime;
-      }
-      if (this.makeScreenFlash) this.p.tint(255, this.alpha);
       this.camera.update();
       this.p.clear();
       this.p.background(0);
@@ -80,7 +71,19 @@ export function makeWorld(p, setScene) {
       this.player.draw(this.camera);
       this.dialogBox.update();
       this.dialogBox.draw();
-      if (this.makeScreenFlash) this.p.noTint();
+      if (this.alpha <= 0) this.blinkBack = true;
+      if (this.alpha >= 255) this.blinkBack = false;
+
+      if (this.blinkBack) {
+        this.alpha += 0.7 * this.easing * this.p.deltaTime;
+      } else {
+        this.alpha -= 0.7 * this.easing * this.p.deltaTime;
+      }
+
+      if (this.makeScreenFlash) {
+        this.p.fill(0, 0, 0, this.alpha);
+        this.p.rect(0, 0, 512, 384);
+      }
     },
 
     keyReleased() {
