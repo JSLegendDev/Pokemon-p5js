@@ -6,9 +6,14 @@ new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
   let currentScene = "menu";
+  function setScene(name) {
+    if (scenes.includes(name)) {
+      currentScene = name;
+    }
+  }
 
   const menu = makeMenu(p);
-  const world = makeWorld(p);
+  const world = makeWorld(p, setScene);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
@@ -32,6 +37,12 @@ new p5((p) => {
         break;
       case "world":
         world.draw();
+        break;
+      case "battle":
+        p.clear();
+        p.background(0);
+        p.color("yellow");
+        p.text("BATTLE SCENE PLACEHOLDER", 200, 200);
         break;
       default:
     }

@@ -4,7 +4,7 @@ import { makeTiledMap } from "../maps/map.js";
 import { makeCamera } from "../utils/camera.js";
 import { makeDialogBox } from "../utils/ui.js";
 
-export function makeWorld(p) {
+export function makeWorld(p, setScene) {
   return {
     p,
     camera: makeCamera(p, 100, 0),
@@ -12,6 +12,10 @@ export function makeWorld(p) {
     npc: makeNPC(p, 0, 0),
     map: makeTiledMap(p, 100, -150),
     dialogBox: makeDialogBox(p, 0, 280),
+    makeScreenFlash: false,
+    alpha: 0,
+    blinkBack: false,
+    easing: 3,
     load() {
       this.dialogBox.load();
       this.map.load("./assets/Trainer Tower interior.png", "./maps/world.json");
@@ -43,6 +47,15 @@ export function makeWorld(p) {
     },
 
     draw() {
+      if (this.alpha <= 0) this.blinkBack = true;
+      if (this.alpha >= 255) this.blinkBack = false;
+
+      if (this.blinkBack) {
+        this.alpha += 0.7 * this.easing * this.p.deltaTime;
+      } else {
+        this.alpha -= 0.7 * this.easing * this.p.deltaTime;
+      }
+      if (this.makeScreenFlash) this.p.tint(255, this.alpha);
       this.camera.update();
       this.p.clear();
       this.p.background(0);
@@ -52,7 +65,14 @@ export function makeWorld(p) {
         this.dialogBox.setText("I see that you need training.\nLet's battle!");
         this.dialogBox.setVisibility(true);
         this.dialogBox.onComplete(() => {
-          setTimeout(() => this.dialogBox.setVisibility(false), 1000);
+          setTimeout(() => {
+            this.dialogBox.setVisibility(false);
+            this.makeScreenFlash = true;
+          }, 1000);
+          setTimeout(() => {
+            this.makeScreenFlash = false;
+            setScene("battle");
+          }, 2000);
         });
       });
       this.map.draw(this.camera, this.player);
@@ -60,6 +80,7 @@ export function makeWorld(p) {
       this.player.draw(this.camera);
       this.dialogBox.update();
       this.dialogBox.draw();
+      if (this.makeScreenFlash) this.p.noTint();
     },
 
     keyReleased() {
