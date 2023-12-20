@@ -24,11 +24,23 @@ export function makeBattle(p) {
       x: 600,
       y: 20,
       spriteRef: null,
+      hp: 100,
     },
     blastoise: {
       finalX: 20,
       x: -170,
       y: 128,
+      spriteRef: null,
+      hp: 100,
+    },
+    dataBox: {
+      x: 510,
+      y: 220,
+      spriteRef: null,
+    },
+    dataBoxFoe: {
+      x: -300,
+      y: 40,
       spriteRef: null,
     },
     load() {
@@ -38,6 +50,10 @@ export function makeBattle(p) {
       this.npc.spriteRef = this.p.loadImage("assets/GENTLEMAN.png");
       this.venusaur.spriteRef = this.p.loadImage("assets/VENUSAUR.png");
       this.blastoise.spriteRef = this.p.loadImage("assets/BLASTOISE.png");
+      this.dataBox.spriteRef = this.p.loadImage("assets/databox_thin.png");
+      this.dataBoxFoe.spriteRef = this.p.loadImage(
+        "assets/databox_thin_foe.png"
+      );
       this.dialogBox.load();
     },
     setup() {
@@ -78,15 +94,24 @@ export function makeBattle(p) {
         this.venusaur.x >= this.venusaur.finalX
       ) {
         this.venusaur.x -= 0.5 * this.p.deltaTime;
+        if (this.dataBoxFoe.x <= 0) this.dataBoxFoe.x += 0.5 * this.p.deltaTime;
       }
 
       this.p.image(this.venusaur.spriteRef, this.venusaur.x, this.venusaur.y);
+
+      this.p.image(
+        this.dataBoxFoe.spriteRef,
+        this.dataBoxFoe.x,
+        this.dataBoxFoe.y
+      );
+      this.p.text("VENUSAUR", this.dataBoxFoe.x + 15, this.dataBoxFoe.y + 30);
 
       if (
         this.currentState === this.states.introPlayerPokemon &&
         this.blastoise.x <= this.blastoise.finalX
       ) {
         this.blastoise.x += 0.5 * this.p.deltaTime;
+        this.dataBox.x -= 0.65 * this.p.deltaTime;
       }
 
       this.p.image(
@@ -94,6 +119,10 @@ export function makeBattle(p) {
         this.blastoise.x,
         this.blastoise.y
       );
+
+      this.p.image(this.dataBox.spriteRef, this.dataBox.x, this.dataBox.y);
+
+      this.p.text("BLASTOISE", this.dataBox.x + 38, this.dataBox.y + 30);
 
       if (
         this.currentState === this.states.default ||

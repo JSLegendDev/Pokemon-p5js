@@ -6,7 +6,7 @@ import { makeBattle } from "./scenes/battle.js";
 new p5((p) => {
   let font;
   const scenes = ["menu", "world", "battle"];
-  let currentScene = "menu";
+  let currentScene = "battle";
   function setScene(name) {
     if (scenes.includes(name)) {
       currentScene = name;
