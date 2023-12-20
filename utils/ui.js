@@ -24,18 +24,15 @@ export function makeDialogBox(p, x, y) {
       this.isVisible = isVisible;
     },
 
-    setText(content) {
+    displayText(content, onComplete) {
       this.lineChars = content.split("");
       this.isComplete = false;
+      if (onComplete) this.onCompleteCallback = onComplete;
     },
 
     clearText() {
       this.line = "";
       this.lineChars = [];
-    },
-
-    onComplete(callback) {
-      this.onCompleteCallback = callback;
     },
 
     update() {

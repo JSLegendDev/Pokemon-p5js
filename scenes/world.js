@@ -53,18 +53,20 @@ export function makeWorld(p, setScene) {
       this.player.update(); // this being before the map draw call is important
       this.npc.update();
       this.npc.handleCollisionsWith(this.player, () => {
-        this.dialogBox.setText("I see that you need training.\nLet's battle!");
+        this.dialogBox.displayText(
+          "I see that you need training.\nLet's battle!",
+          () => {
+            setTimeout(() => {
+              this.dialogBox.setVisibility(false);
+              this.makeScreenFlash = true;
+            }, 1000);
+            setTimeout(() => {
+              this.makeScreenFlash = false;
+              setScene("battle");
+            }, 2000);
+          }
+        );
         this.dialogBox.setVisibility(true);
-        this.dialogBox.onComplete(() => {
-          setTimeout(() => {
-            this.dialogBox.setVisibility(false);
-            this.makeScreenFlash = true;
-          }, 1000);
-          setTimeout(() => {
-            this.makeScreenFlash = false;
-            setScene("battle");
-          }, 2000);
-        });
       });
       this.map.draw(this.camera, this.player);
       this.npc.draw(this.camera);

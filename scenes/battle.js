@@ -11,23 +11,20 @@ export function makeBattle(p) {
       this.dialogBox.load();
     },
     setup() {
-      this.dialogBox.setText("Mark the gentleman wants to battle!");
-      this.dialogBox.setVisibility(true);
-      this.dialogBox.onComplete(() => {
+      this.dialogBox.displayText("Mark the gentleman wants to battle!", () => {
         setTimeout(() => {
           this.dialogBox.clearText();
-          this.dialogBox.setText("He sends out a Venusaur!");
-          this.dialogBox.onComplete(() => {
+          this.dialogBox.displayText("He sends out a Venusaur!", () => {
             setTimeout(() => {
               this.dialogBox.clearText();
-              this.dialogBox.setText("Go! BLASTOISE!");
-              this.dialogBox.onComplete(() => {
+              this.dialogBox.displayText("Go! BLASTOISE!", () => {
                 setTimeout(() => this.dialogBox.clearText(), 1000);
               });
             }, 1000);
           });
         }, 2000);
       });
+      this.dialogBox.setVisibility(true);
     },
     draw() {
       this.p.clear();
