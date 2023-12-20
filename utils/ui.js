@@ -12,6 +12,7 @@ export function makeDialogBox(p, x, y) {
     line: "",
     isVisible: false,
     onCompleteCallback: null,
+    isComplete: false,
     load() {
       this.spriteRef = characterInterface.loadAssets(
         this.p,
@@ -25,6 +26,12 @@ export function makeDialogBox(p, x, y) {
 
     setText(content) {
       this.lineChars = content.split("");
+      this.isComplete = false;
+    },
+
+    clearText() {
+      this.line = "";
+      this.lineChars = [];
     },
 
     onComplete(callback) {
@@ -33,14 +40,17 @@ export function makeDialogBox(p, x, y) {
 
     update() {
       if (!this.isVisible) return;
-      this.previousTime = this.currentTime;
       this.currentTime += this.p.deltaTime;
-      const durationPerFrame = 1000 / 30;
+      const durationPerFrame = 1000 / 60;
       if (this.currentTime >= durationPerFrame) {
         this.currentTime -= durationPerFrame;
 
         const nextChar = this.lineChars.shift();
-        if (!nextChar) {
+
+        if (this.isComplete) return;
+
+        if (!nextChar && !this.isComplete) {
+          this.isComplete = true;
           this.onCompleteCallback();
           return;
         }

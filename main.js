@@ -1,6 +1,7 @@
 import { makeMenu } from "./scenes/menu.js";
 import { debugMode } from "./utils/debugMode.js";
 import { makeWorld } from "./scenes/world.js";
+import { makeBattle } from "./scenes/battle.js";
 
 new p5((p) => {
   let font;
@@ -14,11 +15,13 @@ new p5((p) => {
 
   const menu = makeMenu(p);
   const world = makeWorld(p, setScene);
+  const battle = makeBattle(p);
 
   p.preload = () => {
     font = p.loadFont("./power-clear.ttf");
     world.load();
     menu.load();
+    battle.load();
   };
 
   p.setup = () => {
@@ -28,6 +31,7 @@ new p5((p) => {
     p.textFont(font);
 
     world.setup();
+    battle.setup();
   };
 
   p.draw = () => {
@@ -39,10 +43,7 @@ new p5((p) => {
         world.draw();
         break;
       case "battle":
-        p.clear();
-        p.background(0);
-        p.color("yellow");
-        p.text("BATTLE SCENE PLACEHOLDER", 200, 200);
+        battle.draw();
         break;
       default:
     }
