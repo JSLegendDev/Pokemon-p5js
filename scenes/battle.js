@@ -19,14 +19,16 @@ export function makeBattle(p) {
       y: 20,
       spriteRef: null,
     },
-    venusaur: {
+    npcPokemon: {
+      name: "VENUSAUR",
       finalX: 310,
       x: 600,
       y: 20,
       spriteRef: null,
       hp: 100,
     },
-    blastoise: {
+    playerPokemon: {
+      name: "BLASTOISE",
       finalX: 20,
       x: -170,
       y: 128,
@@ -48,8 +50,8 @@ export function makeBattle(p) {
         "assets/battle-background.png"
       );
       this.npc.spriteRef = this.p.loadImage("assets/GENTLEMAN.png");
-      this.venusaur.spriteRef = this.p.loadImage("assets/VENUSAUR.png");
-      this.blastoise.spriteRef = this.p.loadImage("assets/BLASTOISE.png");
+      this.npcPokemon.spriteRef = this.p.loadImage("assets/VENUSAUR.png");
+      this.playerPokemon.spriteRef = this.p.loadImage("assets/BLASTOISE.png");
       this.dataBox.spriteRef = this.p.loadImage("assets/databox_thin.png");
       this.dataBoxFoe.spriteRef = this.p.loadImage(
         "assets/databox_thin_foe.png"
@@ -57,26 +59,32 @@ export function makeBattle(p) {
       this.dialogBox.load();
     },
     setup() {
-      this.dialogBox.displayText("Mark the gentleman wants to battle!", () => {
+      this.dialogBox.displayText("Mark the gentleman wants to battle !", () => {
         setTimeout(() => {
           this.currentState = this.states.introNpc;
           this.dialogBox.clearText();
-          this.dialogBox.displayText("He sends out a Venusaur!", () => {
-            this.currentState = this.states.introNpcPokemon;
-            setTimeout(() => {
-              this.dialogBox.clearText();
-              this.dialogBox.displayText("Go! BLASTOISE !", () => {
-                this.currentState = this.states.introPlayerPokemon;
-                setTimeout(() => {
-                  this.dialogBox.clearText();
-                  this.dialogBox.displayText(
-                    "What will BLASTOISE do ?",
-                    () => {}
-                  );
-                }, 1000);
-              });
-            }, 1000);
-          });
+          this.dialogBox.displayText(
+            `He sends out a ${this.npcPokemon.name} !`,
+            () => {
+              this.currentState = this.states.introNpcPokemon;
+              setTimeout(() => {
+                this.dialogBox.clearText();
+                this.dialogBox.displayText(
+                  `Go! ${this.playerPokemon.name} !`,
+                  () => {
+                    this.currentState = this.states.introPlayerPokemon;
+                    setTimeout(() => {
+                      this.dialogBox.clearText();
+                      this.dialogBox.displayText(
+                        `What will ${this.playerPokemon.name} do ?`,
+                        () => {}
+                      );
+                    }, 1000);
+                  }
+                );
+              }, 1000);
+            }
+          );
         }, 2000);
       });
       this.dialogBox.setVisibility(true);
@@ -91,38 +99,66 @@ export function makeBattle(p) {
 
       if (
         this.currentState === this.states.introNpcPokemon &&
-        this.venusaur.x >= this.venusaur.finalX
+        this.npcPokemon.x >= this.npcPokemon.finalX
       ) {
-        this.venusaur.x -= 0.5 * this.p.deltaTime;
+        this.npcPokemon.x -= 0.5 * this.p.deltaTime;
         if (this.dataBoxFoe.x <= 0) this.dataBoxFoe.x += 0.5 * this.p.deltaTime;
       }
 
-      this.p.image(this.venusaur.spriteRef, this.venusaur.x, this.venusaur.y);
+      this.p.image(
+        this.npcPokemon.spriteRef,
+        this.npcPokemon.x,
+        this.npcPokemon.y
+      );
 
       this.p.image(
         this.dataBoxFoe.spriteRef,
         this.dataBoxFoe.x,
         this.dataBoxFoe.y
       );
-      this.p.text("VENUSAUR", this.dataBoxFoe.x + 15, this.dataBoxFoe.y + 30);
+      this.p.text(
+        this.npcPokemon.name,
+        this.dataBoxFoe.x + 15,
+        this.dataBoxFoe.y + 30
+      );
+
+      this.p.push();
+      this.p.angleMode(this.p.DEGREES);
+      this.p.rotate(360);
+      this.p.noStroke();
+      this.p.fill(0, 200, 0);
+      this.p.rect(this.dataBoxFoe.x + 118, this.dataBoxFoe.y + 40, 96, 6);
+      this.p.pop();
 
       if (
         this.currentState === this.states.introPlayerPokemon &&
-        this.blastoise.x <= this.blastoise.finalX
+        this.playerPokemon.x <= this.playerPokemon.finalX
       ) {
-        this.blastoise.x += 0.5 * this.p.deltaTime;
+        this.playerPokemon.x += 0.5 * this.p.deltaTime;
         this.dataBox.x -= 0.65 * this.p.deltaTime;
       }
 
       this.p.image(
-        this.blastoise.spriteRef,
-        this.blastoise.x,
-        this.blastoise.y
+        this.playerPokemon.spriteRef,
+        this.playerPokemon.x,
+        this.playerPokemon.y
       );
 
       this.p.image(this.dataBox.spriteRef, this.dataBox.x, this.dataBox.y);
 
-      this.p.text("BLASTOISE", this.dataBox.x + 38, this.dataBox.y + 30);
+      this.p.text(
+        this.playerPokemon.name,
+        this.dataBox.x + 38,
+        this.dataBox.y + 30
+      );
+
+      this.p.push();
+      this.p.angleMode(this.p.DEGREES);
+      this.p.rotate(360);
+      this.p.noStroke();
+      this.p.fill(0, 200, 0);
+      this.p.rect(this.dataBox.x + 136, this.dataBox.y + 40, 96, 6);
+      this.p.pop();
 
       if (
         this.currentState === this.states.default ||
