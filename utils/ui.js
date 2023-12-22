@@ -24,10 +24,20 @@ export function makeDialogBox(p, x, y) {
       this.isVisible = isVisible;
     },
 
+    displayTextImmediately(content) {
+      this.line = content;
+      this.isComplete = true;
+    },
+
     displayText(content, onComplete) {
       this.lineChars = content.split("");
       this.isComplete = false;
-      if (onComplete) this.onCompleteCallback = onComplete;
+      if (onComplete) {
+        this.onCompleteCallback = onComplete;
+        return;
+      }
+
+      this.onCompleteCallback = null;
     },
 
     clearText() {
@@ -48,7 +58,7 @@ export function makeDialogBox(p, x, y) {
 
         if (!nextChar && !this.isComplete) {
           this.isComplete = true;
-          this.onCompleteCallback();
+          if (this.onCompleteCallback) this.onCompleteCallback();
           return;
         }
 

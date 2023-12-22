@@ -77,7 +77,11 @@ export function makeBattle(p) {
                       this.dialogBox.clearText();
                       this.dialogBox.displayText(
                         `What will ${this.playerPokemon.name} do ?`,
-                        () => {}
+                        () => {
+                          setTimeout(() => {
+                            this.currentState = this.states.playerTurn;
+                          }, 1000);
+                        }
                       );
                     }, 1000);
                   }
@@ -165,6 +169,13 @@ export function makeBattle(p) {
         this.currentState === this.states.introNpc
       )
         this.p.image(this.npc.spriteRef, this.npc.x, this.npc.y);
+
+      if (this.currentState === this.states.playerTurn) {
+        this.dialogBox.displayTextImmediately(
+          "1) Waterfall    3) Water Pulse\n2) Tackle        4) Growl"
+        );
+      }
+
       this.dialogBox.update();
       this.dialogBox.draw();
     },
