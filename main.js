@@ -51,12 +51,12 @@ new p5((p) => {
     debugMode.drawFpsCounter(p);
   };
 
-  p.keyPressed = () => {
+  p.keyPressed = (keyEvent) => {
     if (p.keyCode === 112) {
       debugMode.toggle();
     }
 
-    if (p.keyCode === p.ENTER) {
+    if (keyEvent.keyCode === p.ENTER) {
       switch (currentScene) {
         case "menu":
           currentScene = scenes[1];
@@ -69,6 +69,8 @@ new p5((p) => {
         default:
       }
     }
+
+    if (currentScene === "battle") battle.onKeyPressed(keyEvent);
   };
 
   p.keyReleased = () => {

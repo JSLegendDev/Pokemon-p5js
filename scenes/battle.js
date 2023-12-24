@@ -10,6 +10,7 @@ export function makeBattle(p) {
       introNpcPokemon: "intro-npc-pokemon",
       introPlayerPokemon: "intro-player-pokemon",
       playerTurn: "player-turn",
+      playerAttack: "player-attack",
       npcTurn: "npc-turn",
       battleEnd: "battle-end",
     },
@@ -34,16 +35,25 @@ export function makeBattle(p) {
       y: 128,
       spriteRef: null,
       hp: 100,
+      attacks: [
+        { name: "TACKLE", power: 10, type: "normal" },
+        { name: "HYDRO PUMP", power: 110, type: "water" },
+        { name: "HYDRO CANNON", power: 90, type: "water" },
+        { name: "WATER GUN", power: 50, type: "water" },
+      ],
+      selectedAttack: null,
     },
     dataBox: {
       x: 510,
       y: 220,
       spriteRef: null,
+      healthBarLength: 96,
     },
     dataBoxFoe: {
       x: -300,
       y: 40,
       spriteRef: null,
+      healthBarLength: 96,
     },
     load() {
       this.battleBackgroundImage = this.p.loadImage(
@@ -130,8 +140,21 @@ export function makeBattle(p) {
       this.p.angleMode(this.p.DEGREES);
       this.p.rotate(360);
       this.p.noStroke();
-      this.p.fill(0, 200, 0);
-      this.p.rect(this.dataBoxFoe.x + 118, this.dataBoxFoe.y + 40, 96, 6);
+      if (this.dataBoxFoe.healthBarLength > 50) {
+        this.p.fill(0, 200, 0);
+      }
+      if (this.dataBoxFoe.healthBarLength < 50) {
+        this.p.fill(255, 165, 0);
+      }
+      if (this.dataBoxFoe.healthBarLength < 20) {
+        this.p.fill(200, 0, 0);
+      }
+      this.p.rect(
+        this.dataBoxFoe.x + 118,
+        this.dataBoxFoe.y + 40,
+        this.dataBoxFoe.healthBarLength,
+        6
+      );
       this.p.pop();
 
       if (
@@ -161,7 +184,12 @@ export function makeBattle(p) {
       this.p.rotate(360);
       this.p.noStroke();
       this.p.fill(0, 200, 0);
-      this.p.rect(this.dataBox.x + 136, this.dataBox.y + 40, 96, 6);
+      this.p.rect(
+        this.dataBox.x + 136,
+        this.dataBox.y + 40,
+        this.dataBox.healthBarLength,
+        6
+      );
       this.p.pop();
 
       if (
@@ -172,12 +200,50 @@ export function makeBattle(p) {
 
       if (this.currentState === this.states.playerTurn) {
         this.dialogBox.displayTextImmediately(
-          "1) Waterfall    3) Water Pulse\n2) Tackle        4) Growl"
+          `1) ${this.playerPokemon.attacks[0].name}    3) ${this.playerPokemon.attacks[2].name}\n2) ${this.playerPokemon.attacks[1].name}   4) ${this.playerPokemon.attacks[3].name}`
         );
       }
 
+      if (
+        this.playerPokemon.selectedAttack &&
+        this.currentState !== this.states.playerAttack
+      ) {
+        this.dialogBox.clearText();
+        this.dialogBox.displayText(
+          `${this.playerPokemon.name} used ${this.playerPokemon.selectedAttack.name} !`,
+          () => {
+            setTimeout(() => {
+              this.dialogBox.clearText();
+              this.dataBoxFoe.healthBarLength -=
+                this.playerPokemon.selectedAttack.power;
+              this.dialogBox.displayText("It's not effective !");
+            }, 1000);
+          }
+        );
+        this.currentState = this.states.playerAttack;
+      }
       this.dialogBox.update();
       this.dialogBox.draw();
+    },
+    onKeyPressed(keyEvent) {
+      if (this.currentState === this.states.playerTurn) {
+        console.log(keyEvent.key);
+        switch (keyEvent.key) {
+          case "1":
+            this.playerPokemon.selectedAttack = this.playerPokemon.attacks[0];
+            break;
+          case "2":
+            this.playerPokemon.selectedAttack = this.playerPokemon.attacks[1];
+            break;
+          case "3":
+            this.playerPokemon.selectedAttack = this.playerPokemon.attacks[2];
+            break;
+          case "4":
+            this.playerPokemon.selectedAttack = this.playerPokemon.attacks[3];
+            break;
+          default:
+        }
+      }
     },
   };
 }
