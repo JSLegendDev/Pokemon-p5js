@@ -212,16 +212,29 @@ export function makeBattle(p) {
         this.dialogBox.displayText(
           `${this.playerPokemon.name} used ${this.playerPokemon.selectedAttack.name} !`,
           () => {
+            this.dataBoxFoe.healthBarLength -=
+              this.playerPokemon.selectedAttack.power;
             setTimeout(() => {
-              this.dialogBox.clearText();
-              this.dataBoxFoe.healthBarLength -=
-                this.playerPokemon.selectedAttack.power;
-              this.dialogBox.displayText("It's not effective !");
+              // todo
             }, 1000);
           }
         );
         this.currentState = this.states.playerAttack;
       }
+
+      if (this.currentState === this.states.npcTurn) {
+        this.dialogBox.clearText();
+        this.dialogBox.displayText(
+          `The foe's ${this.npcPokemon.name} used TACKLE !`,
+          () => {
+            this.dataBox.healthBarLength -= 10;
+            setTimeout(() => {
+              this.currentState = this.state.playerTurn;
+            }, 1000);
+          }
+        );
+      }
+
       this.dialogBox.update();
       this.dialogBox.draw();
     },
