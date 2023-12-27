@@ -22,14 +22,23 @@ export function makeBattle(p) {
     },
     npcPokemon: {
       name: "VENUSAUR",
+      type: ["grass", "poison"],
       finalX: 310,
       x: 600,
       y: 20,
       spriteRef: null,
       hp: 100,
+      attacks: [
+        { name: "TACKLE", power: 10, type: "normal" },
+        { name: "RAZOR LEAF", power: 55, type: "grass" },
+        { name: "TAKE DOWN", power: 90, type: "normal" },
+        { name: "POWER WHIP", power: 50, type: "grass" },
+      ],
+      selectedAttack: null,
     },
     playerPokemon: {
       name: "BLASTOISE",
+      type: "water",
       finalX: 20,
       x: -170,
       y: 128,
@@ -214,7 +223,6 @@ export function makeBattle(p) {
         this.playerPokemon.selectedAttack &&
         !this.playerPokemon.isAttacking
       ) {
-        console.log(this.currentState);
         this.dialogBox.clearText();
         this.dialogBox.displayText(
           `${this.playerPokemon.name} used ${this.playerPokemon.selectedAttack.name} !`,
@@ -231,12 +239,16 @@ export function makeBattle(p) {
       }
 
       if (this.currentState === this.states.npcTurn) {
-        console.log("it's npc's turn");
+        this.npcPokemon.selectedAttack =
+          this.npcPokemon.attacks[
+            Math.floor(Math.random() * this.npcPokemon.attacks.length)
+          ];
         this.dialogBox.clearText();
         this.dialogBox.displayText(
-          `The foe's ${this.npcPokemon.name} used TACKLE !`,
+          `The foe's ${this.npcPokemon.name} used ${this.npcPokemon.selectedAttack.name} !`,
           () => {
-            this.dataBox.healthBarLength -= 10;
+            this.dataBox.healthBarLength -=
+              this.npcPokemon.selectedAttack.power;
             setTimeout(() => {
               this.playerPokemon.selectedAttack = null;
               this.playerPokemon.isAttacking = false;
