@@ -35,6 +35,7 @@ export function makeBattle(p) {
       y: 128,
       spriteRef: null,
       hp: 100,
+      isAttacking: false,
       attacks: [
         { name: "TACKLE", power: 10, type: "normal" },
         { name: "HYDRO PUMP", power: 110, type: "water" },
@@ -198,16 +199,22 @@ export function makeBattle(p) {
       )
         this.p.image(this.npc.spriteRef, this.npc.x, this.npc.y);
 
-      if (this.currentState === this.states.playerTurn) {
+      if (
+        this.currentState === this.states.playerTurn &&
+        !this.playerPokemon.selectedAttack
+      ) {
+        console.log(this.playerPokemon.selectedAttack);
         this.dialogBox.displayTextImmediately(
           `1) ${this.playerPokemon.attacks[0].name}    3) ${this.playerPokemon.attacks[2].name}\n2) ${this.playerPokemon.attacks[1].name}   4) ${this.playerPokemon.attacks[3].name}`
         );
       }
 
       if (
+        this.currentState === this.states.playerTurn &&
         this.playerPokemon.selectedAttack &&
-        this.currentState !== this.states.playerAttack
+        !this.playerPokemon.isAttacking
       ) {
+        console.log(this.currentState);
         this.dialogBox.clearText();
         this.dialogBox.displayText(
           `${this.playerPokemon.name} used ${this.playerPokemon.selectedAttack.name} !`,
@@ -215,24 +222,28 @@ export function makeBattle(p) {
             this.dataBoxFoe.healthBarLength -=
               this.playerPokemon.selectedAttack.power;
             setTimeout(() => {
-              // todo
+              this.dialogBox.clearText();
+              this.currentState = this.states.npcTurn;
             }, 1000);
           }
         );
-        this.currentState = this.states.playerAttack;
+        this.playerPokemon.isAttacking = true;
       }
 
       if (this.currentState === this.states.npcTurn) {
+        console.log("it's npc's turn");
         this.dialogBox.clearText();
         this.dialogBox.displayText(
           `The foe's ${this.npcPokemon.name} used TACKLE !`,
           () => {
             this.dataBox.healthBarLength -= 10;
             setTimeout(() => {
-              this.currentState = this.state.playerTurn;
+              this.playerPokemon.selectedAttack = null;
+              this.playerPokemon.isAttacking = false;
             }, 1000);
           }
         );
+        this.currentState = this.states.playerTurn;
       }
 
       this.dialogBox.update();
@@ -240,7 +251,6 @@ export function makeBattle(p) {
     },
     onKeyPressed(keyEvent) {
       if (this.currentState === this.states.playerTurn) {
-        console.log(keyEvent.key);
         switch (keyEvent.key) {
           case "1":
             this.playerPokemon.selectedAttack = this.playerPokemon.attacks[0];
