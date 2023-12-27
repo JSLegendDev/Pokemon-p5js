@@ -193,7 +193,15 @@ export function makeBattle(p) {
       this.p.angleMode(this.p.DEGREES);
       this.p.rotate(360);
       this.p.noStroke();
-      this.p.fill(0, 200, 0);
+      if (this.dataBox.healthBarLength > 50) {
+        this.p.fill(0, 200, 0);
+      }
+      if (this.dataBox.healthBarLength < 50) {
+        this.p.fill(255, 165, 0);
+      }
+      if (this.dataBox.healthBarLength < 20) {
+        this.p.fill(200, 0, 0);
+      }
       this.p.rect(
         this.dataBox.x + 136,
         this.dataBox.y + 40,
@@ -212,7 +220,6 @@ export function makeBattle(p) {
         this.currentState === this.states.playerTurn &&
         !this.playerPokemon.selectedAttack
       ) {
-        console.log(this.playerPokemon.selectedAttack);
         this.dialogBox.displayTextImmediately(
           `1) ${this.playerPokemon.attacks[0].name}    3) ${this.playerPokemon.attacks[2].name}\n2) ${this.playerPokemon.attacks[1].name}   4) ${this.playerPokemon.attacks[3].name}`
         );
