@@ -33,7 +33,7 @@ export function makeBattle(p) {
       attacks: [
         { name: "TACKLE", power: 10, type: "normal" },
         { name: "RAZOR LEAF", power: 55, type: "grass" },
-        { name: "TAKE DOWN", power: 90, type: "normal" },
+        { name: "TAKE DOWN", power: 45, type: "normal" },
         { name: "POWER WHIP", power: 50, type: "grass" },
       ],
       selectedAttack: null,
@@ -51,8 +51,8 @@ export function makeBattle(p) {
       isAttacking: false,
       attacks: [
         { name: "TACKLE", power: 10, type: "normal" },
-        { name: "HYDRO PUMP", power: 110, type: "water" },
-        { name: "HYDRO CANNON", power: 90, type: "water" },
+        { name: "HYDRO PUMP", power: 50, type: "water" },
+        { name: "HYDRO CANNON", power: 45, type: "water" },
         { name: "WATER GUN", power: 50, type: "water" },
       ],
       selectedAttack: null,
@@ -61,6 +61,14 @@ export function makeBattle(p) {
     dataBox: {
       x: 510,
       y: 220,
+      nameOffset: {
+        x: 38,
+        y: 30,
+      },
+      healthBarOffset: {
+        x: 136,
+        y: 40,
+      },
       spriteRef: null,
       maxHealthBarLength: 96,
       healthBarLength: 96,
@@ -68,9 +76,46 @@ export function makeBattle(p) {
     dataBoxFoe: {
       x: -300,
       y: 40,
+      nameOffset: {
+        x: 15,
+        y: 30,
+      },
+      healthBarOffset: {
+        x: 118,
+        y: 40,
+      },
       spriteRef: null,
       maxHealthBarLength: 96,
       healthBarLength: 96,
+    },
+    drawDataBox(dataBox, pokemon) {
+      this.p.image(dataBox.spriteRef, dataBox.x, dataBox.y);
+      this.p.text(
+        pokemon.name,
+        dataBox.x + dataBox.nameOffset.x,
+        dataBox.y + dataBox.nameOffset.y
+      );
+
+      this.p.push();
+      this.p.angleMode(this.p.DEGREES);
+      this.p.rotate(360);
+      this.p.noStroke();
+      if (dataBox.healthBarLength > 50) {
+        this.p.fill(0, 200, 0);
+      }
+      if (dataBox.healthBarLength < 50) {
+        this.p.fill(255, 165, 0);
+      }
+      if (dataBox.healthBarLength < 20) {
+        this.p.fill(200, 0, 0);
+      }
+      this.p.rect(
+        dataBox.x + dataBox.healthBarOffset.x,
+        dataBox.y + dataBox.healthBarOffset.y,
+        dataBox.healthBarLength,
+        6
+      );
+      this.p.pop();
     },
     load() {
       this.battleBackgroundImage = this.p.loadImage(
@@ -142,37 +187,7 @@ export function makeBattle(p) {
         this.npcPokemon.y
       );
 
-      this.p.image(
-        this.dataBoxFoe.spriteRef,
-        this.dataBoxFoe.x,
-        this.dataBoxFoe.y
-      );
-      this.p.text(
-        this.npcPokemon.name,
-        this.dataBoxFoe.x + 15,
-        this.dataBoxFoe.y + 30
-      );
-
-      this.p.push();
-      this.p.angleMode(this.p.DEGREES);
-      this.p.rotate(360);
-      this.p.noStroke();
-      if (this.dataBoxFoe.healthBarLength > 50) {
-        this.p.fill(0, 200, 0);
-      }
-      if (this.dataBoxFoe.healthBarLength < 50) {
-        this.p.fill(255, 165, 0);
-      }
-      if (this.dataBoxFoe.healthBarLength < 20) {
-        this.p.fill(200, 0, 0);
-      }
-      this.p.rect(
-        this.dataBoxFoe.x + 118,
-        this.dataBoxFoe.y + 40,
-        this.dataBoxFoe.healthBarLength,
-        6
-      );
-      this.p.pop();
+      this.drawDataBox(this.dataBoxFoe, this.npcPokemon);
 
       if (
         this.currentState === this.states.introPlayerPokemon &&
@@ -188,34 +203,7 @@ export function makeBattle(p) {
         this.playerPokemon.y
       );
 
-      this.p.image(this.dataBox.spriteRef, this.dataBox.x, this.dataBox.y);
-
-      this.p.text(
-        this.playerPokemon.name,
-        this.dataBox.x + 38,
-        this.dataBox.y + 30
-      );
-
-      this.p.push();
-      this.p.angleMode(this.p.DEGREES);
-      this.p.rotate(360);
-      this.p.noStroke();
-      if (this.dataBox.healthBarLength > 50) {
-        this.p.fill(0, 200, 0);
-      }
-      if (this.dataBox.healthBarLength < 50) {
-        this.p.fill(255, 165, 0);
-      }
-      if (this.dataBox.healthBarLength < 20) {
-        this.p.fill(200, 0, 0);
-      }
-      this.p.rect(
-        this.dataBox.x + 136,
-        this.dataBox.y + 40,
-        this.dataBox.healthBarLength,
-        6
-      );
-      this.p.pop();
+      this.drawDataBox(this.dataBox, this.playerPokemon);
 
       if (
         this.currentState === this.states.default ||
