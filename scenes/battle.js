@@ -13,6 +13,7 @@ export function makeBattle(p) {
       playerAttack: "player-attack",
       npcTurn: "npc-turn",
       battleEnd: "battle-end",
+      winnerDeclared: "winner-declared",
     },
     currentState: "default",
     npc: {
@@ -27,6 +28,7 @@ export function makeBattle(p) {
       x: 600,
       y: 20,
       spriteRef: null,
+      maxHp: 100,
       hp: 100,
       attacks: [
         { name: "TACKLE", power: 10, type: "normal" },
@@ -35,6 +37,7 @@ export function makeBattle(p) {
         { name: "POWER WHIP", power: 50, type: "grass" },
       ],
       selectedAttack: null,
+      isFainted: false,
     },
     playerPokemon: {
       name: "BLASTOISE",
@@ -43,6 +46,7 @@ export function makeBattle(p) {
       x: -170,
       y: 128,
       spriteRef: null,
+      maxHp: 100,
       hp: 100,
       isAttacking: false,
       attacks: [
@@ -52,17 +56,20 @@ export function makeBattle(p) {
         { name: "WATER GUN", power: 50, type: "water" },
       ],
       selectedAttack: null,
+      isFainted: false,
     },
     dataBox: {
       x: 510,
       y: 220,
       spriteRef: null,
+      maxHealthBarLength: 96,
       healthBarLength: 96,
     },
     dataBoxFoe: {
       x: -300,
       y: 40,
       spriteRef: null,
+      maxHealthBarLength: 96,
       healthBarLength: 96,
     },
     load() {
@@ -228,14 +235,26 @@ export function makeBattle(p) {
       if (
         this.currentState === this.states.playerTurn &&
         this.playerPokemon.selectedAttack &&
-        !this.playerPokemon.isAttacking
+        !this.playerPokemon.isAttacking &&
+        !this.playerPokemon.isFainted
       ) {
         this.dialogBox.clearText();
         this.dialogBox.displayText(
           `${this.playerPokemon.name} used ${this.playerPokemon.selectedAttack.name} !`,
           () => {
-            this.dataBoxFoe.healthBarLength -=
-              this.playerPokemon.selectedAttack.power;
+            this.npcPokemon.hp -= this.playerPokemon.selectedAttack.power;
+            if (this.npcPokemon.hp > 0) {
+              this.dataBoxFoe.healthBarLength =
+                (this.npcPokemon.hp * this.dataBoxFoe.maxHealthBarLength) /
+                this.npcPokemon.maxHp;
+            } else {
+              this.dataBoxFoe.healthBarLength = 0;
+              this.npcPokemon.isFainted = true;
+              setTimeout(() => {
+                this.currentState = this.states.battleEnd;
+              }, 1000);
+              return;
+            }
             setTimeout(() => {
               this.dialogBox.clearText();
               this.currentState = this.states.npcTurn;
@@ -245,7 +264,10 @@ export function makeBattle(p) {
         this.playerPokemon.isAttacking = true;
       }
 
-      if (this.currentState === this.states.npcTurn) {
+      if (
+        this.currentState === this.states.npcTurn &&
+        !this.npcPokemon.isFainted
+      ) {
         this.npcPokemon.selectedAttack =
           this.npcPokemon.attacks[
             Math.floor(Math.random() * this.npcPokemon.attacks.length)
@@ -254,8 +276,19 @@ export function makeBattle(p) {
         this.dialogBox.displayText(
           `The foe's ${this.npcPokemon.name} used ${this.npcPokemon.selectedAttack.name} !`,
           () => {
-            this.dataBox.healthBarLength -=
-              this.npcPokemon.selectedAttack.power;
+            this.playerPokemon.hp -= this.npcPokemon.selectedAttack.power;
+            if (this.playerPokemon.hp > 0) {
+              this.dataBox.healthBarLength =
+                (this.playerPokemon.hp * this.dataBox.maxHealthBarLength) /
+                this.playerPokemon.maxHp;
+            } else {
+              this.dataBox.healthBarLength = 0;
+              this.playerPokemon.isFainted = true;
+              setTimeout(() => {
+                this.currentState = this.states.battleEnd;
+              }, 1000);
+              return;
+            }
             setTimeout(() => {
               this.playerPokemon.selectedAttack = null;
               this.playerPokemon.isAttacking = false;
@@ -263,6 +296,33 @@ export function makeBattle(p) {
           }
         );
         this.currentState = this.states.playerTurn;
+      }
+
+      if (this.currentState === this.states.battleEnd) {
+        if (this.npcPokemon.isFainted) {
+          this.dialogBox.clearText();
+          this.dialogBox.displayText(
+            `${this.npcPokemon.name} fainted ! You won !`
+          );
+          this.currentState = this.states.winnerDeclared;
+          return;
+        }
+
+        if (this.playerPokemon.isFainted) {
+          this.dialogBox.clearText();
+          this.dialogBox.displayText(
+            `${this.playerPokemon.name} fainted ! You lost !`
+          );
+          this.currentState = this.states.winnerDeclared;
+        }
+      }
+
+      if (this.playerPokemon.isFainted) {
+        this.playerPokemon.y += 0.8 * this.p.deltaTime;
+      }
+
+      if (this.npcPokemon.isFainted) {
+        this.npcPokemon.y += 0.8 * this.p.deltaTime;
       }
 
       this.dialogBox.update();

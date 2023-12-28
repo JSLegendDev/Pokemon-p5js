@@ -26,6 +26,8 @@ new p5((p) => {
 
   p.setup = () => {
     const canvasEl = p.createCanvas(512, 384);
+    // make canvas sharper temporarly
+    p.pixelDensity(3);
     canvasEl.canvas.style = "";
 
     p.textFont(font);
