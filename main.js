@@ -45,6 +45,7 @@ new p5((p) => {
         world.draw();
         break;
       case "battle":
+        battle.update();
         battle.draw();
         break;
       default:

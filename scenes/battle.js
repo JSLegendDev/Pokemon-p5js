@@ -38,6 +38,7 @@ export function makeBattle(p) {
       ],
       selectedAttack: null,
       isFainted: false,
+      getDataBox: () => this.dataBoxFoe,
     },
     playerPokemon: {
       name: "BLASTOISE",
@@ -57,6 +58,7 @@ export function makeBattle(p) {
       ],
       selectedAttack: null,
       isFainted: false,
+      getDataBox: () => this.dataBox,
     },
     dataBox: {
       x: 510,
@@ -165,10 +167,7 @@ export function makeBattle(p) {
       });
       this.dialogBox.setVisibility(true);
     },
-    draw() {
-      this.p.clear();
-      this.p.background(0);
-      this.p.image(this.battleBackgroundImage, 0, 0);
+    update() {
       if (this.currentState === this.states.introNpc) {
         this.npc.x += 0.5 * this.p.deltaTime;
       }
@@ -181,14 +180,6 @@ export function makeBattle(p) {
         if (this.dataBoxFoe.x <= 0) this.dataBoxFoe.x += 0.5 * this.p.deltaTime;
       }
 
-      this.p.image(
-        this.npcPokemon.spriteRef,
-        this.npcPokemon.x,
-        this.npcPokemon.y
-      );
-
-      this.drawDataBox(this.dataBoxFoe, this.npcPokemon);
-
       if (
         this.currentState === this.states.introPlayerPokemon &&
         this.playerPokemon.x <= this.playerPokemon.finalX
@@ -196,6 +187,27 @@ export function makeBattle(p) {
         this.playerPokemon.x += 0.5 * this.p.deltaTime;
         this.dataBox.x -= 0.65 * this.p.deltaTime;
       }
+
+      if (this.playerPokemon.isFainted) {
+        this.playerPokemon.y += 0.8 * this.p.deltaTime;
+      }
+
+      if (this.npcPokemon.isFainted) {
+        this.npcPokemon.y += 0.8 * this.p.deltaTime;
+      }
+    },
+    draw() {
+      this.p.clear();
+      this.p.background(0);
+      this.p.image(this.battleBackgroundImage, 0, 0);
+
+      this.p.image(
+        this.npcPokemon.spriteRef,
+        this.npcPokemon.x,
+        this.npcPokemon.y
+      );
+
+      this.drawDataBox(this.dataBoxFoe, this.npcPokemon);
 
       this.p.image(
         this.playerPokemon.spriteRef,
@@ -303,14 +315,6 @@ export function makeBattle(p) {
           );
           this.currentState = this.states.winnerDeclared;
         }
-      }
-
-      if (this.playerPokemon.isFainted) {
-        this.playerPokemon.y += 0.8 * this.p.deltaTime;
-      }
-
-      if (this.npcPokemon.isFainted) {
-        this.npcPokemon.y += 0.8 * this.p.deltaTime;
       }
 
       this.dialogBox.update();
