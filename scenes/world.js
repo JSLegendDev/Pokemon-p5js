@@ -46,12 +46,23 @@ export function makeWorld(p, setScene) {
       this.npc.setAnim("idle-down");
     },
 
-    draw() {
+    update() {
       this.camera.update();
-      this.p.clear();
-      this.p.background(0);
       this.player.update(); // this being before the map draw call is important
       this.npc.update();
+      this.dialogBox.update();
+      if (this.alpha <= 0) this.blinkBack = true;
+      if (this.alpha >= 255) this.blinkBack = false;
+
+      if (this.blinkBack) {
+        this.alpha += 0.7 * this.easing * this.p.deltaTime;
+      } else {
+        this.alpha -= 0.7 * this.easing * this.p.deltaTime;
+      }
+    },
+    draw() {
+      this.p.clear();
+      this.p.background(0);
       this.npc.handleCollisionsWith(this.player, () => {
         this.dialogBox.displayText(
           "I see that you need training.\nLet's battle!",
@@ -71,16 +82,7 @@ export function makeWorld(p, setScene) {
       this.map.draw(this.camera, this.player);
       this.npc.draw(this.camera);
       this.player.draw(this.camera);
-      this.dialogBox.update();
       this.dialogBox.draw();
-      if (this.alpha <= 0) this.blinkBack = true;
-      if (this.alpha >= 255) this.blinkBack = false;
-
-      if (this.blinkBack) {
-        this.alpha += 0.7 * this.easing * this.p.deltaTime;
-      } else {
-        this.alpha -= 0.7 * this.easing * this.p.deltaTime;
-      }
 
       if (this.makeScreenFlash) {
         this.p.fill(0, 0, 0, this.alpha);

@@ -42,6 +42,7 @@ new p5((p) => {
         menu.draw();
         break;
       case "world":
+        world.update();
         world.draw();
         break;
       case "battle":

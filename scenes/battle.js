@@ -195,6 +195,8 @@ export function makeBattle(p) {
       if (this.npcPokemon.isFainted) {
         this.npcPokemon.y += 0.8 * this.p.deltaTime;
       }
+
+      this.dialogBox.update();
     },
     draw() {
       this.p.clear();
@@ -317,7 +319,7 @@ export function makeBattle(p) {
         }
       }
 
-      this.dialogBox.update();
+      this.p.rect(0, 288, 512, 200);
       this.dialogBox.draw();
     },
     onKeyPressed(keyEvent) {
