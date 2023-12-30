@@ -66,15 +66,13 @@ export function makeWorld(p, setScene) {
       this.npc.handleCollisionsWith(this.player, () => {
         this.dialogBox.displayText(
           "I see that you need training.\nLet's battle!",
-          () => {
-            setTimeout(() => {
-              this.dialogBox.setVisibility(false);
-              this.makeScreenFlash = true;
-            }, 1000);
-            setTimeout(() => {
-              this.makeScreenFlash = false;
-              setScene("battle");
-            }, 2000);
+          async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            this.dialogBox.setVisibility(false);
+            this.makeScreenFlash = true;
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            this.makeScreenFlash = false;
+            setScene("battle");
           }
         );
         this.dialogBox.setVisibility(true);

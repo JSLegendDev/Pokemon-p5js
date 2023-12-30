@@ -23,7 +23,6 @@ export function makeBattle(p) {
     },
     npcPokemon: {
       name: "VENUSAUR",
-      type: ["grass", "poison"],
       finalX: 310,
       x: 600,
       y: 20,
@@ -31,18 +30,16 @@ export function makeBattle(p) {
       maxHp: 100,
       hp: 100,
       attacks: [
-        { name: "TACKLE", power: 10, type: "normal" },
-        { name: "RAZOR LEAF", power: 55, type: "grass" },
-        { name: "TAKE DOWN", power: 45, type: "normal" },
-        { name: "POWER WHIP", power: 50, type: "grass" },
+        { name: "TACKLE", power: 10 },
+        { name: "RAZOR LEAF", power: 55 },
+        { name: "TAKE DOWN", power: 45 },
+        { name: "POWER WHIP", power: 50 },
       ],
       selectedAttack: null,
       isFainted: false,
-      getDataBox: () => this.dataBoxFoe,
     },
     playerPokemon: {
       name: "BLASTOISE",
-      type: "water",
       finalX: 20,
       x: -170,
       y: 128,
@@ -51,14 +48,13 @@ export function makeBattle(p) {
       hp: 100,
       isAttacking: false,
       attacks: [
-        { name: "TACKLE", power: 10, type: "normal" },
-        { name: "HYDRO PUMP", power: 50, type: "water" },
-        { name: "HYDRO CANNON", power: 45, type: "water" },
-        { name: "WATER GUN", power: 50, type: "water" },
+        { name: "TACKLE", power: 10 },
+        { name: "HYDRO PUMP", power: 50 },
+        { name: "HYDRO CANNON", power: 45 },
+        { name: "WATER GUN", power: 50 },
       ],
       selectedAttack: null,
       isFainted: false,
-      getDataBox: () => this.dataBox,
     },
     dataBox: {
       x: 510,
@@ -133,38 +129,37 @@ export function makeBattle(p) {
       this.dialogBox.load();
     },
     setup() {
-      this.dialogBox.displayText("Mark the gentleman wants to battle !", () => {
-        setTimeout(() => {
+      this.dialogBox.displayText(
+        "Mark the gentleman wants to battle !",
+        async () => {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
           this.currentState = this.states.introNpc;
           this.dialogBox.clearText();
           this.dialogBox.displayText(
             `He sends out a ${this.npcPokemon.name} !`,
-            () => {
+            async () => {
               this.currentState = this.states.introNpcPokemon;
-              setTimeout(() => {
-                this.dialogBox.clearText();
-                this.dialogBox.displayText(
-                  `Go! ${this.playerPokemon.name} !`,
-                  () => {
-                    this.currentState = this.states.introPlayerPokemon;
-                    setTimeout(() => {
-                      this.dialogBox.clearText();
-                      this.dialogBox.displayText(
-                        `What will ${this.playerPokemon.name} do ?`,
-                        () => {
-                          setTimeout(() => {
-                            this.currentState = this.states.playerTurn;
-                          }, 1000);
-                        }
-                      );
-                    }, 1000);
-                  }
-                );
-              }, 1000);
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              this.dialogBox.clearText();
+              this.dialogBox.displayText(
+                `Go! ${this.playerPokemon.name} !`,
+                async () => {
+                  this.currentState = this.states.introPlayerPokemon;
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                  this.dialogBox.clearText();
+                  this.dialogBox.displayText(
+                    `What will ${this.playerPokemon.name} do ?`,
+                    async () => {
+                      await new Promise((resolve) => setTimeout(resolve, 1000));
+                      this.currentState = this.states.playerTurn;
+                    }
+                  );
+                }
+              );
             }
           );
-        }, 2000);
-      });
+        }
+      );
       this.dialogBox.setVisibility(true);
     },
     update() {
