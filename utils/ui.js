@@ -16,7 +16,7 @@ export function makeDialogBox(p, x, y) {
     load() {
       this.spriteRef = characterInterface.loadAssets(
         this.p,
-        "assets/overlay_message.png"
+        "./assets/overlay_message.png"
       );
     },
 

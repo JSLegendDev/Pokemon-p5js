@@ -7,8 +7,8 @@ export function makeMenu(p) {
     alpha: 255,
     blinkBack: false,
     load() {
-      this.startScreen = this.p.loadImage("assets/title.png");
-      this.startTextImg = this.p.loadImage("assets/start.png");
+      this.startScreen = this.p.loadImage("./assets/title.png");
+      this.startTextImg = this.p.loadImage("./assets/start.png");
     },
     update() {
       if (this.alpha <= 0) this.blinkBack = true;

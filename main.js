@@ -18,7 +18,7 @@ new p5((p) => {
   const battle = makeBattle(p);
 
   p.preload = () => {
-    font = p.loadFont("./power-clear.ttf");
+    font = p.loadFont("./assets/power-clear.ttf");
     world.load();
     menu.load();
     battle.load();
@@ -57,7 +57,7 @@ new p5((p) => {
   };
 
   p.keyPressed = (keyEvent) => {
-    if (p.keyCode === 112) {
+    if (keyEvent.key === "Shift") {
       debugMode.toggle();
     }
 
@@ -65,11 +65,6 @@ new p5((p) => {
       switch (currentScene) {
         case "menu":
           currentScene = scenes[1];
-          break;
-        case "world":
-          break;
-        case "battle":
-          // TODO
           break;
         default:
       }
