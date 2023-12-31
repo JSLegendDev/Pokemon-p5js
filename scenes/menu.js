@@ -10,10 +10,7 @@ export function makeMenu(p) {
       this.startScreen = this.p.loadImage("assets/title.png");
       this.startTextImg = this.p.loadImage("assets/start.png");
     },
-    draw() {
-      this.p.clear();
-      this.p.noSmooth();
-      this.p.image(this.startScreen, 0, 0);
+    update() {
       if (this.alpha <= 0) this.blinkBack = true;
       if (this.alpha >= 255) this.blinkBack = false;
 
@@ -22,6 +19,11 @@ export function makeMenu(p) {
       } else {
         this.alpha -= 0.7 * this.easing * this.p.deltaTime;
       }
+    },
+    draw() {
+      this.p.clear();
+      this.p.noSmooth();
+      this.p.image(this.startScreen, 0, 0);
       this.p.tint(255, this.alpha);
       this.p.image(this.startTextImg, 0, 320);
       this.p.noTint();

@@ -39,6 +39,7 @@ new p5((p) => {
   p.draw = () => {
     switch (currentScene) {
       case "menu":
+        menu.update();
         menu.draw();
         break;
       case "world":
