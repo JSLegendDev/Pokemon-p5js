@@ -1,4 +1,4 @@
-import { characterProps, characterInterface } from "./character.js";
+import { characterProps, characterInterface } from "./character";
 import {
   drawTile,
   getFramesPos,
