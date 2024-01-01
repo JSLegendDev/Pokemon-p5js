@@ -4,7 +4,7 @@ import {
   isMaxOneKeyDown,
   debugMode,
 } from "../utils.js";
-import { characterProps, characterInterface } from "./character.js";
+import { characterProps, characterInterface } from "./entity.js";
 
 export function makePlayer(p, x, y) {
   return {

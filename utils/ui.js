@@ -1,4 +1,4 @@
-import { characterInterface } from "../entities/character.js";
+import { characterInterface } from "../entities/entity.js";
 
 export function makeDialogBox(p, x, y) {
   return {
