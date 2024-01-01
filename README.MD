@@ -1,5 +1,7 @@
 # Pokemon prototype game made with JavaScript + p5.js
 
+![Screenshot of the game](./screenshot.png)
+
 Live demo : https://jslegend.itch.io/p5-pokemon-prototype
 
 A prototype pokemon game that includes :
