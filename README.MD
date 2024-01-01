@@ -13,8 +13,7 @@ A prototype pokemon game that includes :
 - player controller
 - basic collision detection
 
-Made with JavaScript and the p5.js creative coding library
-by JSLegend.
+Made with JavaScript and the p5.js creative coding library.
 
 Tutorial on how to build this (TBD)
 
