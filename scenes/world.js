@@ -1,4 +1,4 @@
-import { makeNPC } from "../entities/NPC.js";
+import { makeNPC } from "../entities/npc.js";
 import { makePlayer } from "../entities/player.js";
 import { makeTiledMap } from "../maps/map.js";
 import { makeCamera } from "../utils/camera.js";
