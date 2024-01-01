@@ -1,5 +1,5 @@
-import { makeCollidable } from "../entities/collidable.js";
-import { drawTile, getFramesPos } from "../utils.js";
+import { makeCollidable } from "./entities/collidable.js";
+import { drawTile, getFramesPos } from "./utils.js";
 
 export function makeTiledMap(p, x, y) {
   return {
