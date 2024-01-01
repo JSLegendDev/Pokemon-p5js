@@ -1,5 +1,5 @@
 import { makeMenu } from "./scenes/menu.js";
-import { debugMode } from "./utils/debugMode.js";
+import { debugMode } from "./utils.js";
 import { makeWorld } from "./scenes/world.js";
 import { makeBattle } from "./scenes/battle.js";
 

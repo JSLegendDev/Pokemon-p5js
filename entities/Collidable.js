@@ -1,4 +1,4 @@
-import { debugMode } from "../utils/debugMode.js";
+import { debugMode } from "../utils.js";
 
 export function makeCollidable(p, x, y, width, height) {
   return {

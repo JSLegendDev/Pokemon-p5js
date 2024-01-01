@@ -1,7 +1,11 @@
 import { characterProps, characterInterface } from "./character.js";
-import { debugMode } from "../utils/debugMode.js";
-import { drawTile, getFramesPos } from "../utils/spritesheetUtils.js";
-import { checkCollision, preventOverlap } from "../utils/collisionLogic.js";
+import {
+  drawTile,
+  getFramesPos,
+  debugMode,
+  checkCollision,
+  preventOverlap,
+} from "../utils.js";
 
 export function makeNPC(p, x, y) {
   return {
