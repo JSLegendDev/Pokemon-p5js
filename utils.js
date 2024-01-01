@@ -1,4 +1,4 @@
-import { characterInterface } from "../entities/character.js";
+import { characterInterface } from "../entities/entity.js";
 
 export function makeCamera(p, x, y) {
   return {
