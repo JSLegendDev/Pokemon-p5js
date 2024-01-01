@@ -17,3 +17,6 @@ Made with JavaScript and the p5.js creative coding library
 by JSLegend.
 
 Tutorial on how to build this (TBD)
+
+I run a YouTube channel where I make long-form JS gamedev tutorials.
+If you're interested you can take a look : https://youtube.com/@jslegenddev
