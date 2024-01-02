@@ -28,7 +28,11 @@
     <script>
       // prevent itch.io scrolling
       window.addEventListener("keydown", function (e) {
-        if ([32, 37, 38, 39, 40].includes(e.keyCode)) {
+        if (
+          ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(
+            e.key
+          )
+        ) {
           e.preventDefault();
         }
       });
