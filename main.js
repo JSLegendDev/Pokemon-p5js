@@ -25,7 +25,7 @@ new p5((p) => {
   };
 
   p.setup = () => {
-    const canvasEl = p.createCanvas(512, 384);
+    const canvasEl = p.createCanvas(512, 384, document.getElementById("game"));
     // make canvas sharper temporarly
     p.pixelDensity(3);
     canvasEl.canvas.style = "";
