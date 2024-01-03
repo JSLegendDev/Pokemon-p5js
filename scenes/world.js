@@ -5,7 +5,6 @@ import { makeCamera, makeDialogBox } from "../utils.js";
 
 export function makeWorld(p, setScene) {
   return {
-    p,
     camera: makeCamera(p, 100, 0),
     player: makePlayer(p, 0, 0),
     npc: makeNPC(p, 0, 0),
@@ -54,14 +53,14 @@ export function makeWorld(p, setScene) {
       if (this.alpha >= 255) this.blinkBack = false;
 
       if (this.blinkBack) {
-        this.alpha += 0.7 * this.easing * this.p.deltaTime;
+        this.alpha += 0.7 * this.easing * p.deltaTime;
       } else {
-        this.alpha -= 0.7 * this.easing * this.p.deltaTime;
+        this.alpha -= 0.7 * this.easing * p.deltaTime;
       }
     },
     draw() {
-      this.p.clear();
-      this.p.background(0);
+      p.clear();
+      p.background(0);
       this.npc.handleCollisionsWith(this.player, () => {
         this.dialogBox.displayText(
           "I see that you need training.\nLet's battle !",
@@ -82,19 +81,19 @@ export function makeWorld(p, setScene) {
       this.dialogBox.draw();
 
       if (this.makeScreenFlash) {
-        this.p.fill(0, 0, 0, this.alpha);
-        this.p.rect(0, 0, 512, 384);
+        p.fill(0, 0, 0, this.alpha);
+        p.rect(0, 0, 512, 384);
       }
     },
 
     keyReleased() {
       for (const key of [
-        this.p.RIGHT_ARROW,
-        this.p.LEFT_ARROW,
-        this.p.UP_ARROW,
-        this.p.DOWN_ARROW,
+        p.RIGHT_ARROW,
+        p.LEFT_ARROW,
+        p.UP_ARROW,
+        p.DOWN_ARROW,
       ]) {
-        if (this.p.keyIsDown(key)) {
+        if (p.keyIsDown(key)) {
           return;
         }
       }

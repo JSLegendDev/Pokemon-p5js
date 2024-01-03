@@ -2,7 +2,6 @@ import { characterInterface } from "./entities/entity.js";
 
 export function makeCamera(p, x, y) {
   return {
-    p,
     x,
     y,
     prevX: x,
@@ -12,8 +11,8 @@ export function makeCamera(p, x, y) {
     },
 
     update() {
-      this.x = -this.entity.x + this.p.width / 2;
-      this.y = -this.entity.y + this.p.height / 2;
+      this.x = -this.entity.x + p.width / 2;
+      this.y = -this.entity.y + p.height / 2;
     },
   };
 }
@@ -139,7 +138,6 @@ export function drawTile(
 
 export function makeDialogBox(p, x, y) {
   return {
-    p,
     x,
     y,
     spriteRef: null,
@@ -152,7 +150,7 @@ export function makeDialogBox(p, x, y) {
     isComplete: false,
     load() {
       this.spriteRef = characterInterface.loadAssets(
-        this.p,
+        p,
         "./assets/overlay_message.png"
       );
     },
@@ -184,7 +182,7 @@ export function makeDialogBox(p, x, y) {
 
     update() {
       if (!this.isVisible) return;
-      this.currentTime += this.p.deltaTime;
+      this.currentTime += p.deltaTime;
       const durationPerFrame = 1000 / 60;
       if (this.currentTime >= durationPerFrame) {
         this.currentTime -= durationPerFrame;
@@ -204,11 +202,11 @@ export function makeDialogBox(p, x, y) {
     },
     draw() {
       if (!this.isVisible) return;
-      this.p.noSmooth();
-      this.p.image(this.spriteRef, this.x, this.y);
-      this.p.fill("black");
-      this.p.textSize(24);
-      this.p.text(this.line, this.x + 30, this.y + 42);
+      p.noSmooth();
+      p.image(this.spriteRef, this.x, this.y);
+      p.fill("black");
+      p.textSize(24);
+      p.text(this.line, this.x + 30, this.y + 42);
     },
   };
 }

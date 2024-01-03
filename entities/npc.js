@@ -19,7 +19,7 @@ export function makeNPC(p, x, y) {
     ...characterProps,
     load() {
       this.spriteRef = characterInterface.loadAssets(
-        this.p,
+        p,
         "assets/trainer_GENTLEMAN.png"
       );
     },
@@ -38,7 +38,7 @@ export function makeNPC(p, x, y) {
 
     update() {
       this.previousTime = this.animationTimer;
-      this.animationTimer += this.p.deltaTime;
+      this.animationTimer += p.deltaTime;
       const animData = this.anims[this.currentAnim];
       this.currentFrameData = characterInterface.setAnimFrame(this, animData);
     },
@@ -47,10 +47,10 @@ export function makeNPC(p, x, y) {
       this.screenX = this.x + camera.x;
       this.screenY = this.y + camera.y;
 
-      this.p.noSmooth();
-      debugMode.drawHitbox(this.p, this);
+      p.noSmooth();
+      debugMode.drawHitbox(p, this);
       drawTile(
-        this.p,
+        p,
         this.spriteRef,
         this.screenX + this.spriteX,
         this.screenY + this.spriteY,

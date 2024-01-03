@@ -2,7 +2,6 @@ import { debugMode } from "../utils.js";
 
 export function makeCollidable(p, x, y, width, height) {
   return {
-    p,
     x,
     y,
     screenX: x,
@@ -51,7 +50,7 @@ export function makeCollidable(p, x, y, width, height) {
     },
 
     draw() {
-      debugMode.drawHitbox(this.p, this);
+      debugMode.drawHitbox(p, this);
     },
   };
 }

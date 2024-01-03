@@ -8,7 +8,6 @@ import { characterProps, characterInterface } from "./entity.js";
 
 export function makePlayer(p, x, y) {
   return {
-    p,
     ...characterProps,
     direction: "down",
     speed: 200,
@@ -20,10 +19,7 @@ export function makePlayer(p, x, y) {
     spriteY: -15,
     freeze: false,
     load() {
-      this.spriteRef = characterInterface.loadAssets(
-        this.p,
-        "assets/boy_run.png"
-      );
+      this.spriteRef = characterInterface.loadAssets(p, "assets/boy_run.png");
     },
 
     prepareAnims() {
@@ -44,27 +40,27 @@ export function makePlayer(p, x, y) {
     },
 
     movePlayer(moveBy) {
-      if (!isMaxOneKeyDown(this.p) || this.freeze) return;
+      if (!isMaxOneKeyDown(p) || this.freeze) return;
 
-      if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
+      if (p.keyIsDown(p.RIGHT_ARROW)) {
         if (this.direction !== "right") this.direction = "right";
         if (this.currentAnim !== "run-side") this.setAnim("run-side");
         this.x += moveBy;
       }
 
-      if (this.p.keyIsDown(this.p.LEFT_ARROW)) {
+      if (p.keyIsDown(p.LEFT_ARROW)) {
         if (this.direction !== "left") this.direction = "left";
         if (this.currentAnim !== "run-side") this.setAnim("run-side");
         this.x -= moveBy;
       }
 
-      if (this.p.keyIsDown(this.p.UP_ARROW)) {
+      if (p.keyIsDown(p.UP_ARROW)) {
         if (this.direction !== "up") this.direction = "up";
         if (this.currentAnim !== "run-up") this.setAnim("run-up");
         this.y -= moveBy;
       }
 
-      if (this.p.keyIsDown(this.p.DOWN_ARROW)) {
+      if (p.keyIsDown(p.DOWN_ARROW)) {
         if (this.direction !== "down") this.direction = "down";
         if (this.currentAnim !== "run-down") this.setAnim("run-down");
         this.y += moveBy;
@@ -73,9 +69,9 @@ export function makePlayer(p, x, y) {
 
     update() {
       this.previousTime = this.animationTimer;
-      this.animationTimer += this.p.deltaTime;
+      this.animationTimer += p.deltaTime;
 
-      const moveBy = (this.speed / 1000) * this.p.deltaTime;
+      const moveBy = (this.speed / 1000) * p.deltaTime;
       this.movePlayer(moveBy);
 
       const animData = this.anims[this.currentAnim];
@@ -86,15 +82,15 @@ export function makePlayer(p, x, y) {
       this.screenX = this.x + camera.x;
       this.screenY = this.y + camera.y;
 
-      this.p.push();
+      p.push();
       if (this.direction === "right") {
-        this.p.scale(-1, 1);
-        this.p.translate(-2 * this.screenX - this.tileWidth, 0);
+        p.scale(-1, 1);
+        p.translate(-2 * this.screenX - this.tileWidth, 0);
       }
-      this.p.noSmooth();
-      debugMode.drawHitbox(this.p, this);
+      p.noSmooth();
+      debugMode.drawHitbox(p, this);
       drawTile(
-        this.p,
+        p,
         this.spriteRef,
         this.screenX + this.spriteX,
         this.screenY + this.spriteY,
@@ -103,7 +99,7 @@ export function makePlayer(p, x, y) {
         this.tileWidth,
         this.tileHeight
       );
-      this.p.pop();
+      p.pop();
     },
   };
 }

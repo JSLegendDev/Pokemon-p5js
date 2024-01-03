@@ -3,13 +3,12 @@ import { drawTile, getFramesPos } from "../utils.js";
 
 export function makeTiledMap(p, x, y) {
   return {
-    p,
     tileWidth: 32,
     tileHeight: 32,
     x,
     y,
     async load(tilesetURL, tiledMapURL) {
-      this.mapImage = this.p.loadImage(tilesetURL);
+      this.mapImage = p.loadImage(tilesetURL);
       const response = await fetch(tiledMapURL);
       this.tiledData = await response.json();
     },
@@ -43,7 +42,7 @@ export function makeTiledMap(p, x, y) {
             if (tileNumber === 0) continue;
 
             drawTile(
-              this.p,
+              p,
               this.mapImage,
               Math.round(currentTilePos.x + camera.x),
               Math.round(currentTilePos.y + camera.y),
@@ -58,7 +57,7 @@ export function makeTiledMap(p, x, y) {
         if (layer.type === "objectgroup" && layer.name === "Boundaries") {
           for (const boundary of layer.objects) {
             const collidable = makeCollidable(
-              this.p,
+              p,
               boundary.x,
               this.y + boundary.y + 32,
               boundary.width,
