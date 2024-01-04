@@ -17,33 +17,33 @@ export const characterInterface = {
     return p.loadImage(assetPath);
   },
 
-  setAnim(context, name) {
-    context.currentAnim = name;
-    context.currentFrame = 0;
-    context.animationTimer = 0;
-    context.previousTime = 0;
+  setAnim(character, name) {
+    character.currentAnim = name;
+    character.currentFrame = 0;
+    character.animationTimer = 0;
+    character.previousTime = 0;
   },
 
-  setAnimFrame(context, animData) {
+  setAnimFrame(character, animData) {
     if (typeof animData === "number") {
-      context.currentFrame = animData;
-      return context.frames[context.currentFrame];
+      character.currentFrame = animData;
+      return character.frames[character.currentFrame];
     }
 
-    if (context.currentFrame === 0) {
-      context.currentFrame = animData.from;
+    if (character.currentFrame === 0) {
+      character.currentFrame = animData.from;
     }
 
-    if (context.currentFrame > animData.to && animData.loop) {
-      context.currentFrame = animData.from;
+    if (character.currentFrame > animData.to && animData.loop) {
+      character.currentFrame = animData.from;
     }
 
-    const currentFrame = context.frames[context.currentFrame];
+    const currentFrame = character.frames[character.currentFrame];
 
     const durationPerFrame = 1000 / animData.speed;
-    if (context.animationTimer >= durationPerFrame) {
-      context.currentFrame++;
-      context.animationTimer -= durationPerFrame;
+    if (character.animationTimer >= durationPerFrame) {
+      character.currentFrame++;
+      character.animationTimer -= durationPerFrame;
     }
 
     return currentFrame;
