@@ -12,6 +12,40 @@ const states = {
   winnerDeclared: "winner-declared",
 };
 
+function makePokemon(name, x, finalX, y, maxHp, attacks, dataBox) {
+  return {
+    name,
+    finalX,
+    x,
+    y,
+    spriteRef: null,
+    maxHp,
+    hp: maxHp,
+    attacks,
+    selectedAttack: null,
+    isFainted: false,
+    dataBox,
+  };
+}
+
+function makeDataBox(x, y, nameX, nameY, healthBarX, healthBarY) {
+  return {
+    x,
+    y,
+    nameOffset: {
+      x: nameX,
+      y: nameY,
+    },
+    healthBarOffset: {
+      x: healthBarX,
+      y: healthBarY,
+    },
+    spriteRef: null,
+    maxHealthBarLength: 96,
+    healthBarLength: 96,
+  };
+}
+
 export function makeBattle(p) {
   return {
     dialogBox: makeDialogBox(p, 0, 288),
@@ -21,71 +55,34 @@ export function makeBattle(p) {
       y: 20,
       spriteRef: null,
     },
-    npcPokemon: {
-      name: "VENUSAUR",
-      finalX: 310,
-      x: 600,
-      y: 20,
-      spriteRef: null,
-      maxHp: 100,
-      hp: 100,
-      attacks: [
+    npcPokemon: makePokemon(
+      "VENUSAUR",
+      600,
+      310,
+      20,
+      100,
+      [
         { name: "TACKLE", power: 10 },
         { name: "RAZOR LEAF", power: 55 },
         { name: "TAKE DOWN", power: 45 },
         { name: "POWER WHIP", power: 50 },
       ],
-      selectedAttack: null,
-      isFainted: false,
-      dataBox: {
-        x: -300,
-        y: 40,
-        nameOffset: {
-          x: 15,
-          y: 30,
-        },
-        healthBarOffset: {
-          x: 118,
-          y: 40,
-        },
-        spriteRef: null,
-        maxHealthBarLength: 96,
-        healthBarLength: 96,
-      },
-    },
-    playerPokemon: {
-      name: "BLASTOISE",
-      finalX: 20,
-      x: -170,
-      y: 128,
-      spriteRef: null,
-      maxHp: 100,
-      hp: 100,
-      isAttacking: false,
-      attacks: [
+      makeDataBox(-300, 40, 15, 30, 118, 40)
+    ),
+    playerPokemon: makePokemon(
+      "BLASTOISE",
+      -170,
+      20,
+      128,
+      100,
+      [
         { name: "TACKLE", power: 10 },
         { name: "HYDRO PUMP", power: 50 },
         { name: "HYDRO CANNON", power: 45 },
         { name: "WATER GUN", power: 50 },
       ],
-      selectedAttack: null,
-      isFainted: false,
-      dataBox: {
-        x: 510,
-        y: 220,
-        nameOffset: {
-          x: 38,
-          y: 30,
-        },
-        healthBarOffset: {
-          x: 136,
-          y: 40,
-        },
-        spriteRef: null,
-        maxHealthBarLength: 96,
-        healthBarLength: 96,
-      },
-    },
+      makeDataBox(510, 220, 38, 30, 136, 40)
+    ),
     drawDataBox(pokemon) {
       p.image(pokemon.dataBox.spriteRef, pokemon.dataBox.x, pokemon.dataBox.y);
       p.text(
