@@ -1,4 +1,4 @@
-import { makeDialogBox } from "../utils.js";
+import { makeDialogBox } from "../entities/dialogBox.js";
 
 const states = {
   default: "default",

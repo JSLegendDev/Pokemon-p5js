@@ -1,14 +1,10 @@
-import {
-  drawTile,
-  getFramesPos,
-  isMaxOneKeyDown,
-  debugMode,
-} from "../utils.js";
-import { characterProps, characterInterface } from "./character.js";
+import { makeCharacter } from "./character.js";
+import { debugMode } from "./debugMode.js";
+import { drawTile, getFramesPos, isMaxOneKeyDown } from "../utils.js";
 
 export function makePlayer(p, x, y) {
   return {
-    ...characterProps,
+    ...makeCharacter(p),
     direction: "down",
     speed: 200,
     x,
@@ -19,7 +15,7 @@ export function makePlayer(p, x, y) {
     spriteY: -15,
     freeze: false,
     load() {
-      this.spriteRef = characterInterface.loadAssets(p, "assets/boy_run.png");
+      this.spriteRef = p.loadImage("assets/boy_run.png");
     },
 
     prepareAnims() {
@@ -33,10 +29,6 @@ export function makePlayer(p, x, y) {
         "run-side": { from: 4, to: 7, loop: true, speed: 8 },
         "run-up": { from: 12, to: 15, loop: true, speed: 8 },
       };
-    },
-
-    setAnim(name) {
-      characterInterface.setAnim(this, name);
     },
 
     movePlayer(moveBy) {
@@ -75,7 +67,7 @@ export function makePlayer(p, x, y) {
       this.movePlayer(moveBy);
 
       const animData = this.anims[this.currentAnim];
-      this.currentFrameData = characterInterface.setAnimFrame(this, animData);
+      this.currentFrameData = this.setAnimFrame(animData);
     },
 
     draw(camera) {

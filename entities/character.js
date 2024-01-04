@@ -1,51 +1,47 @@
-export const characterProps = {
-  spriteRef: null,
-  anims: {},
-  currentAnim: null,
-  currentFrame: 0,
-  currentFrameData: null,
-  animationTimer: 0,
-  previousTime: 0,
-  tileWidth: 32,
-  tileHeight: 48,
-  width: 32,
-  height: 32,
-};
+export function makeCharacter(p) {
+  return {
+    spriteRef: null,
+    anims: {},
+    currentAnim: null,
+    currentFrame: 0,
+    currentFrameData: null,
+    animationTimer: 0,
+    previousTime: 0,
+    tileWidth: 32,
+    tileHeight: 48,
+    width: 32,
+    height: 32,
 
-export const characterInterface = {
-  loadAssets(p, assetPath) {
-    return p.loadImage(assetPath);
-  },
+    setAnim(name) {
+      this.currentAnim = name;
+      this.currentFrame = 0;
+      this.animationTimer = 0;
+      this.previousTime = 0;
+    },
 
-  setAnim(character, name) {
-    character.currentAnim = name;
-    character.currentFrame = 0;
-    character.animationTimer = 0;
-    character.previousTime = 0;
-  },
+    setAnimFrame(animData) {
+      if (typeof animData === "number") {
+        this.currentFrame = animData;
+        return this.frames[this.currentFrame];
+      }
 
-  setAnimFrame(character, animData) {
-    if (typeof animData === "number") {
-      character.currentFrame = animData;
-      return character.frames[character.currentFrame];
-    }
+      if (this.currentFrame === 0) {
+        this.currentFrame = animData.from;
+      }
 
-    if (character.currentFrame === 0) {
-      character.currentFrame = animData.from;
-    }
+      if (this.currentFrame > animData.to && animData.loop) {
+        this.currentFrame = animData.from;
+      }
 
-    if (character.currentFrame > animData.to && animData.loop) {
-      character.currentFrame = animData.from;
-    }
+      const currentFrame = this.frames[this.currentFrame];
 
-    const currentFrame = character.frames[character.currentFrame];
+      const durationPerFrame = 1000 / animData.speed;
+      if (this.animationTimer >= durationPerFrame) {
+        this.currentFrame++;
+        this.animationTimer -= durationPerFrame;
+      }
 
-    const durationPerFrame = 1000 / animData.speed;
-    if (character.animationTimer >= durationPerFrame) {
-      character.currentFrame++;
-      character.animationTimer -= durationPerFrame;
-    }
-
-    return currentFrame;
-  },
-};
+      return currentFrame;
+    },
+  };
+}

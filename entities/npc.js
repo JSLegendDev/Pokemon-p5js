@@ -1,27 +1,23 @@
-import { characterProps, characterInterface } from "./character.js";
+import { makeCharacter } from "./character.js";
+import { debugMode } from "./debugMode.js";
 import {
   drawTile,
   getFramesPos,
-  debugMode,
   checkCollision,
   preventOverlap,
 } from "../utils.js";
 
 export function makeNPC(p, x, y) {
   return {
-    p,
+    ...makeCharacter(p),
     x,
     y,
     screenX: x,
     screenY: y,
     spriteX: 0,
     spriteY: -15,
-    ...characterProps,
     load() {
-      this.spriteRef = characterInterface.loadAssets(
-        p,
-        "assets/trainer_GENTLEMAN.png"
-      );
+      this.spriteRef = p.loadImage("assets/trainer_GENTLEMAN.png");
     },
 
     prepareAnims() {
@@ -32,15 +28,11 @@ export function makeNPC(p, x, y) {
       };
     },
 
-    setAnim(name) {
-      characterInterface.setAnim(this, name);
-    },
-
     update() {
       this.previousTime = this.animationTimer;
       this.animationTimer += p.deltaTime;
       const animData = this.anims[this.currentAnim];
-      this.currentFrameData = characterInterface.setAnimFrame(this, animData);
+      this.currentFrameData = this.setAnimFrame(animData);
     },
 
     draw(camera) {
