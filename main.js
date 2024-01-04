@@ -61,13 +61,8 @@ new p5((p) => {
       debugMode.toggle();
     }
 
-    if (keyEvent.keyCode === p.ENTER) {
-      switch (currentScene) {
-        case "menu":
-          currentScene = scenes[1];
-          break;
-        default:
-      }
+    if (keyEvent.keyCode === p.ENTER && currentScene === "menu") {
+      currentScene = scenes[1];
     }
 
     if (currentScene === "battle") battle.onKeyPressed(keyEvent);
