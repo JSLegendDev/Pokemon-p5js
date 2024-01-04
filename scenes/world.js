@@ -37,12 +37,10 @@ export function makeWorld(p, setScene) {
           default:
         }
       }
-      this.player.prepareAnims();
-      this.player.setAnim("idle-down");
+      this.player.setup();
       this.camera.attachTo(this.player);
 
-      this.npc.prepareAnims();
-      this.npc.setAnim("idle-down");
+      this.npc.setup();
     },
 
     update() {

@@ -13,10 +13,16 @@ export function makeCharacter(p) {
     height: 32,
 
     setAnim(name) {
-      this.currentAnim = name;
-      this.currentFrame = 0;
-      this.animationTimer = 0;
-      this.previousTime = 0;
+      if (this.currentAnim !== name) {
+        this.currentAnim = name;
+        this.currentFrame = 0;
+        this.animationTimer = 0;
+        this.previousTime = 0;
+      }
+    },
+
+    setDirection(direction) {
+      if (this.direction !== direction) this.direction = direction;
     },
 
     setAnimFrame(animData) {

@@ -31,6 +31,7 @@ new p5((p) => {
     canvasEl.canvas.style = "";
 
     p.textFont(font);
+    p.noSmooth(); // for pixels to not become blurry
 
     world.setup();
     battle.setup();

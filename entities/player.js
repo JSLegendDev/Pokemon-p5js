@@ -5,7 +5,6 @@ import { drawTile, getFramesPos, isMaxOneKeyDown } from "../utils.js";
 export function makePlayer(p, x, y) {
   return {
     ...makeCharacter(p),
-    direction: "down",
     speed: 200,
     x,
     y,
@@ -35,28 +34,34 @@ export function makePlayer(p, x, y) {
       if (!isMaxOneKeyDown(p) || this.freeze) return;
 
       if (p.keyIsDown(p.RIGHT_ARROW)) {
-        if (this.direction !== "right") this.direction = "right";
-        if (this.currentAnim !== "run-side") this.setAnim("run-side");
+        this.setDirection("right");
+        this.setAnim("run-side");
         this.x += moveBy;
       }
 
       if (p.keyIsDown(p.LEFT_ARROW)) {
-        if (this.direction !== "left") this.direction = "left";
-        if (this.currentAnim !== "run-side") this.setAnim("run-side");
+        this.setDirection("left");
+        this.setAnim("run-side");
         this.x -= moveBy;
       }
 
       if (p.keyIsDown(p.UP_ARROW)) {
-        if (this.direction !== "up") this.direction = "up";
-        if (this.currentAnim !== "run-up") this.setAnim("run-up");
+        this.setDirection("up");
+        this.setAnim("run-up");
         this.y -= moveBy;
       }
 
       if (p.keyIsDown(p.DOWN_ARROW)) {
-        if (this.direction !== "down") this.direction = "down";
-        if (this.currentAnim !== "run-down") this.setAnim("run-down");
+        this.setDirection("down");
+        this.setAnim("run-down");
         this.y += moveBy;
       }
+    },
+
+    setup() {
+      this.prepareAnims();
+      this.direction = "down";
+      this.setAnim("idle-down");
     },
 
     update() {
@@ -79,7 +84,6 @@ export function makePlayer(p, x, y) {
         p.scale(-1, 1);
         p.translate(-2 * this.screenX - this.tileWidth, 0);
       }
-      p.noSmooth();
       debugMode.drawHitbox(p, this);
       drawTile(
         p,

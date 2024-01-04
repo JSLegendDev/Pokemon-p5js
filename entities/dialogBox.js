@@ -61,7 +61,6 @@ export function makeDialogBox(p, x, y) {
     },
     draw() {
       if (!this.isVisible) return;
-      p.noSmooth();
       p.image(this.spriteRef, this.x, this.y);
       p.fill("black");
       p.textSize(24);

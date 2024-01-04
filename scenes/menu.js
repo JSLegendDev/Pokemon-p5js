@@ -21,7 +21,6 @@ export function makeMenu(p) {
     },
     draw() {
       p.clear();
-      p.noSmooth();
       p.image(this.startScreenImgRef, 0, 0);
       p.tint(255, this.alpha);
       p.image(this.startTextImgRef, 0, 320);

@@ -28,6 +28,11 @@ export function makeNPC(p, x, y) {
       };
     },
 
+    setup() {
+      this.prepareAnims();
+      this.setAnim("idle-down");
+    },
+
     update() {
       this.previousTime = this.animationTimer;
       this.animationTimer += p.deltaTime;
@@ -39,7 +44,6 @@ export function makeNPC(p, x, y) {
       this.screenX = this.x + camera.x;
       this.screenY = this.y + camera.y;
 
-      p.noSmooth();
       debugMode.drawHitbox(p, this);
       drawTile(
         p,
