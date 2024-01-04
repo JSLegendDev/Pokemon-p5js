@@ -61,9 +61,8 @@ new p5((p) => {
       debugMode.toggle();
     }
 
-    if (keyEvent.keyCode === p.ENTER && currentScene === "menu") {
-      currentScene = scenes[1];
-    }
+    if (keyEvent.keyCode === p.ENTER && currentScene === "menu")
+      setScene("world");
 
     if (currentScene === "battle") battle.onKeyPressed(keyEvent);
   };
