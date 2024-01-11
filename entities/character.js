@@ -39,7 +39,7 @@ export function makeCharacter(p) {
         this.currentFrame = animData.from;
       }
 
-      const currentFrame = this.frames[this.currentFrame];
+      const currentFrameData = this.frames[this.currentFrame];
 
       const durationPerFrame = 1000 / animData.speed;
       if (this.animationTimer >= durationPerFrame) {
@@ -47,7 +47,7 @@ export function makeCharacter(p) {
         this.animationTimer -= durationPerFrame;
       }
 
-      return currentFrame;
+      return currentFrameData;
     },
   };
 }
