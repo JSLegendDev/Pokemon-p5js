@@ -32,7 +32,7 @@ export function makeTiledMap(p, x, y) {
           let nbOfTilesDrawn = 0;
           for (const tileNumber of layer.data) {
             if (nbOfTilesDrawn % layer.width === 0) {
-              currentTilePos.x = 0;
+              currentTilePos.x = this.x;
               currentTilePos.y += this.tileHeight;
             } else {
               currentTilePos.x += this.tileWidth;
@@ -58,8 +58,8 @@ export function makeTiledMap(p, x, y) {
           for (const boundary of layer.objects) {
             const collidable = makeCollidable(
               p,
-              boundary.x,
-              this.y + boundary.y + 32,
+              this.x + boundary.x,
+              this.y + boundary.y + this.tileHeight,
               boundary.width,
               boundary.height
             );

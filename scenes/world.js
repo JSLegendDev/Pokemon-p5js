@@ -27,11 +27,11 @@ export function makeWorld(p, setScene) {
       for (const spawnPoint of spawnPoints) {
         switch (spawnPoint.name) {
           case "player":
-            this.player.x = spawnPoint.x;
+            this.player.x = this.map.x + spawnPoint.x;
             this.player.y = this.map.y + spawnPoint.y + 32;
             break;
           case "npc":
-            this.npc.x = spawnPoint.x;
+            this.npc.x = this.map.x + spawnPoint.x;
             this.npc.y = this.map.y + spawnPoint.y + 32;
             break;
           default:
