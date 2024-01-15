@@ -105,8 +105,6 @@ export function makeWorld(p, setScene) {
           this.player.setAnim("idle-down");
           break;
         case "left":
-          this.player.setAnim("idle-side");
-          break;
         case "right":
           this.player.setAnim("idle-side");
           break;
